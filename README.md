@@ -174,10 +174,34 @@ where $r=8$ is the LoRA rank (0.01% of GPT-2 parameters).
 - Synthetic fraud narrative generation
 - Data augmentation: 4.2% accuracy improvement
 
-**6. Inference API** (`inference_api.py`)
+**6. Llama Integration & Monitoring** (`ollama_integration.py` + `llama_randomizer_trainer.py`)
+- **Role:** Local LLM backbone for real-time fraud narrative analysis and pattern synthesis
+- **Architecture:** 
+  - Ollama (local inference engine) for offline LLM deployment
+  - Llama 2 or Mistral models for fraud understanding
+  - Multi-turn monitoring conversations for pattern detection
+- **Monitoring Capabilities:**
+  - Tracks transaction narratives through semantic understanding
+  - Detects anomalous patterns via Llama's contextual analysis
+  - Generates explainable fraud reasoning in natural language
+  - Monitors federated learning updates for suspicious patterns
+- **Narrative Generation:**
+  - Generates synthetic fraud scenarios for data augmentation
+  - Creates counter-narratives for known fraud patterns
+  - Produces human-readable fraud explanations from embeddings
+  - Fine-tunable via LoRA for domain-specific fraud language
+- **Key Functions:**
+  - `analyze_fraud_narrative()`: Semantic fraud analysis
+  - `generate_fraud_scenarios()`: Synthetic data generation
+  - `monitor_federated_updates()`: Tracks model changes across nodes
+  - `explain_fraud_decision()`: Natural language explanations
+  - Real-time monitoring dashboard for fraud trend alerts
+
+**7. Inference API** (`inference_api.py`)
 - Real-time fraud scoring (<100ms latency)
 - 100+ transactions/minute throughput
-- Returns: fraud probability, risk level, PII count
+- Integrated with Llama for narrative understanding
+- Returns: fraud probability, risk level, PII count, Llama-generated explanation
 
 ---
 
@@ -292,7 +316,25 @@ GenAI-Fraud-Detection-V2/
 - Improved robustness with 4.2% accuracy gain
 - Efficient parameter overhead (0.1% of GPT-2)
 
-### 5. Comprehensive Analysis
+### 5. Llama-Powered GenAI Monitoring & Analysis
+- **Local LLM Deployment via Ollama:** Runs Llama 2/Mistral locally without API dependency
+- **Real-time Narrative Monitoring:**
+  - Contextual fraud understanding through Llama embeddings
+  - Pattern detection across federated nodes
+  - Semantic similarity analysis for known fraud signatures
+- **Generative Explanations:**
+  - Llama generates human-readable fraud reasons
+  - Multi-turn conversations for deeper pattern analysis
+  - Adaptive response generation based on fraud type
+- **Synthetic Data Generation:**
+  - Creates realistic fraud narratives for training
+  - Improves model robustness with diverse scenarios
+  - Domain-specific language via fine-tuning
+- **Federated Monitoring:**
+  - Tracks model updates across 5 organizations
+  - Detects suspicious aggregation patterns
+  - Generates alerts for anomalous federated rounds
+  - Maintains transparency through Llama explanations
 - Attack pattern classification (8 types)
 - Historical trend analysis
 - Performance metrics tracking
@@ -320,7 +362,32 @@ python notebooks/genai_narrative_generator.py
 ```
 Fine-tunes GPT-2 with LoRA for fraud narrative generation. Output: `models/fraud_pattern_generator_lora/`
 
-### 4. Analyze Fraud Patterns
+### 4b. Llama-based GenAI Monitoring (New)
+```bash
+# Start Ollama service (offline LLM engine)
+ollama serve
+
+# In separate terminal: Pull Llama 2 model
+ollama pull llama2
+
+# Run fraud monitoring with Llama integration
+python notebooks/ollama_integration.py
+```
+Monitors fraud patterns with Llama-powered contextual analysis:
+- Real-time narrative understanding
+- Federated update monitoring
+- Synthetic fraud scenario generation
+- Human-readable fraud explanations
+
+### 4c. Fine-tune Llama for Domain-Specific Patterns
+```bash
+python notebooks/llama_randomizer_trainer.py
+```
+Fine-tunes Llama model on fraud narratives:
+- LoRA-based efficient adaptation
+- Domain-specific fraud language learning
+- Maintains privacy via local training
+- Output: Fraud-tuned Llama variant
 ```bash
 python notebooks/attack_pattern_analyzer.py
 ```
