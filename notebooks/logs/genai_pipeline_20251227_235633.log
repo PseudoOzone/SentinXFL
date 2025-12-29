@@ -1,0 +1,38 @@
+2025-12-27 23:56:33 - __main__ - INFO - ================================================================================
+2025-12-27 23:56:33 - __main__ - INFO - GenAI Fraud Detection Pipeline Coordinator
+2025-12-27 23:56:33 - __main__ - INFO - ================================================================================
+2025-12-27 23:56:33 - __main__ - INFO - 
+2025-12-27 23:56:33 - __main__ - INFO - ================================================================================
+2025-12-27 23:56:33 - __main__ - INFO - SYSTEM INFORMATION
+2025-12-27 23:56:33 - __main__ - INFO - ================================================================================
+2025-12-27 23:56:33 - __main__ - INFO - PyTorch Version: 2.9.1+cpu
+2025-12-27 23:56:33 - __main__ - WARNING - CUDA NOT Available - Using CPU
+2025-12-27 23:56:33 - __main__ - INFO - 
+2025-12-27 23:56:33 - __main__ - INFO - 
+2025-12-27 23:56:33 - __main__ - INFO - ================================================================================
+2025-12-27 23:56:33 - __main__ - INFO - [STEP1] PII CLEANING
+2025-12-27 23:56:33 - __main__ - INFO - ================================================================================
+2025-12-27 23:56:33 - pii_cleaner - INFO - Loading all datasets...
+2025-12-27 23:56:33 - pii_cleaner - WARNING - Dataset not found: data\Base.csv
+2025-12-27 23:56:33 - pii_cleaner - WARNING - Dataset not found: data\Variant I.csv
+2025-12-27 23:56:33 - pii_cleaner - WARNING - Dataset not found: data\Variant II.csv
+2025-12-27 23:56:33 - pii_cleaner - WARNING - Dataset not found: data\Variant III.csv
+2025-12-27 23:56:33 - pii_cleaner - WARNING - Dataset not found: data\Variant IV.csv
+2025-12-27 23:56:33 - pii_cleaner - WARNING - Dataset not found: data\Variant V.csv
+2025-12-27 23:56:33 - pii_cleaner - ERROR - Error in PII cleaning pipeline: No datasets found in data directory
+2025-12-27 23:56:33 - __main__ - ERROR - Traceback (most recent call last):
+  File "C:\Users\anshu\GenAI-Powered Fraud Detection System\notebooks\run_pipeline_genai.py", line 97, in run_step1_pii_cleaning
+    output_path = cleaner.run()
+  File "C:\Users\anshu\GenAI-Powered Fraud Detection System\notebooks\pii_cleaner.py", line 100, in run
+    raise FileNotFoundError("No datasets found in data directory")
+FileNotFoundError: No datasets found in data directory
+
+2025-12-27 23:56:33 - __main__ - INFO - 
+2025-12-27 23:56:33 - __main__ - INFO - ================================================================================
+2025-12-27 23:56:33 - __main__ - INFO - PIPELINE SUMMARY
+2025-12-27 23:56:33 - __main__ - INFO - ================================================================================
+2025-12-27 23:56:33 - __main__ - INFO - Total Time: 0:00:00.092678
+2025-12-27 23:56:33 - __main__ - INFO - Log File: logs\genai_pipeline_20251227_235633.log
+2025-12-27 23:56:33 - __main__ - INFO - 
+2025-12-27 23:56:33 - __main__ - INFO - ================================================================================
+2025-12-27 23:56:33 - __main__ - INFO - ================================================================================

@@ -1,0 +1,82 @@
+2025-12-28 02:21:21 - __main__ - INFO - ================================================================================
+2025-12-28 02:21:21 - __main__ - INFO - GenAI Fraud Detection Pipeline Coordinator
+2025-12-28 02:21:21 - __main__ - INFO - ================================================================================
+2025-12-28 02:21:21 - __main__ - INFO - 
+2025-12-28 02:21:21 - __main__ - INFO - ================================================================================
+2025-12-28 02:21:21 - __main__ - INFO - SYSTEM INFORMATION
+2025-12-28 02:21:21 - __main__ - INFO - ================================================================================
+2025-12-28 02:21:21 - __main__ - INFO - PyTorch Version: 2.6.0+cu124
+2025-12-28 02:21:21 - __main__ - INFO - CUDA Available: Yes
+2025-12-28 02:21:21 - __main__ - INFO - CUDA Version: 12.4
+2025-12-28 02:21:21 - __main__ - INFO - GPU Count: 1
+2025-12-28 02:21:21 - __main__ - INFO - GPU 0: NVIDIA GeForce RTX 3050 Laptop GPU
+2025-12-28 02:21:21 - __main__ - INFO -   Memory: 4.29 GB
+2025-12-28 02:21:21 - __main__ - INFO - 
+2025-12-28 02:21:21 - __main__ - INFO - 
+2025-12-28 02:21:21 - __main__ - INFO - ================================================================================
+2025-12-28 02:21:21 - __main__ - INFO - [STEP1] PII CLEANING
+2025-12-28 02:21:21 - __main__ - INFO - ================================================================================
+2025-12-28 02:21:21 - pii_cleaner - INFO - Loading all datasets...
+2025-12-28 02:21:21 - pii_cleaner - INFO - Loaded Base.csv: 50000 rows (sampled)
+2025-12-28 02:21:21 - pii_cleaner - INFO - Loaded Variant I.csv: 50000 rows (sampled)
+2025-12-28 02:21:22 - pii_cleaner - INFO - Loaded Variant II.csv: 50000 rows (sampled)
+2025-12-28 02:21:22 - pii_cleaner - INFO - Loaded Variant III.csv: 50000 rows (sampled)
+2025-12-28 02:21:22 - pii_cleaner - INFO - Loaded Variant IV.csv: 50000 rows (sampled)
+2025-12-28 02:21:22 - pii_cleaner - INFO - Loaded Variant V.csv: 50000 rows (sampled)
+2025-12-28 02:21:22 - pii_cleaner - INFO - Cleaning PII from all datasets...
+2025-12-28 02:21:22 - pii_cleaner - INFO - Cleaning PII from Base
+2025-12-28 02:21:24 - pii_cleaner - INFO - Saved cleaned dataset: C:\Users\anshu\GenAI-Powered Fraud Detection System\generated\Base_clean.csv
+2025-12-28 02:21:24 - pii_cleaner - INFO - Cleaning PII from Variant I
+2025-12-28 02:21:25 - pii_cleaner - INFO - Saved cleaned dataset: C:\Users\anshu\GenAI-Powered Fraud Detection System\generated\Variant I_clean.csv
+2025-12-28 02:21:25 - pii_cleaner - INFO - Cleaning PII from Variant II
+2025-12-28 02:21:26 - pii_cleaner - INFO - Saved cleaned dataset: C:\Users\anshu\GenAI-Powered Fraud Detection System\generated\Variant II_clean.csv
+2025-12-28 02:21:26 - pii_cleaner - INFO - Cleaning PII from Variant III
+2025-12-28 02:21:27 - pii_cleaner - INFO - Saved cleaned dataset: C:\Users\anshu\GenAI-Powered Fraud Detection System\generated\Variant III_clean.csv
+2025-12-28 02:21:27 - pii_cleaner - INFO - Cleaning PII from Variant IV
+2025-12-28 02:21:28 - pii_cleaner - INFO - Saved cleaned dataset: C:\Users\anshu\GenAI-Powered Fraud Detection System\generated\Variant IV_clean.csv
+2025-12-28 02:21:28 - pii_cleaner - INFO - Cleaning PII from Variant V
+2025-12-28 02:21:29 - pii_cleaner - INFO - Saved cleaned dataset: C:\Users\anshu\GenAI-Powered Fraud Detection System\generated\Variant V_clean.csv
+2025-12-28 02:21:29 - pii_cleaner - INFO - Combining all cleaned datasets...
+2025-12-28 02:21:29 - pii_cleaner - INFO - Combined datasets into 300000 rows
+2025-12-28 02:21:36 - pii_cleaner - INFO - Saved combined clean dataset: C:\Users\anshu\GenAI-Powered Fraud Detection System\generated\fraud_data_combined_clean.csv
+2025-12-28 02:21:36 - __main__ - INFO - 
+2025-12-28 02:21:36 - __main__ - INFO - ================================================================================
+2025-12-28 02:21:36 - __main__ - INFO - [STEP2] FRAUD NARRATIVE GENERATION
+2025-12-28 02:21:36 - __main__ - INFO - ================================================================================
+2025-12-28 02:21:36 - genai_narrative_generator - INFO - Loading data from C:\Users\anshu\GenAI-Powered Fraud Detection System\generated\fraud_data_combined_clean.csv
+2025-12-28 02:21:38 - genai_narrative_generator - INFO - Generating narratives for 5000 transactions
+2025-12-28 02:21:38 - genai_narrative_generator - INFO - Augmenting narratives with fraud patterns
+2025-12-28 02:21:38 - genai_narrative_generator - INFO - Saved 5000 narratives to C:\Users\anshu\GenAI-Powered Fraud Detection System\generated\fraud_narratives_combined.csv
+2025-12-28 02:21:38 - genai_narrative_generator - INFO - Narrative generation complete: 5000 narratives
+2025-12-28 02:21:38 - __main__ - INFO - 
+2025-12-28 02:21:38 - __main__ - INFO - ================================================================================
+2025-12-28 02:21:38 - __main__ - INFO - [STEP3] FRAUD EMBEDDING MODEL
+2025-12-28 02:21:38 - __main__ - INFO - ================================================================================
+2025-12-28 02:21:38 - genai_embedding_model - INFO - Loading narratives from C:\Users\anshu\GenAI-Powered Fraud Detection System\generated\fraud_narratives_combined.csv
+2025-12-28 02:21:38 - genai_embedding_model - INFO - Loaded 5000 narratives
+2025-12-28 02:21:38 - genai_embedding_model - INFO - Using device: cuda:0
+2025-12-28 02:21:38 - genai_embedding_model - INFO - GPU: NVIDIA GeForce RTX 3050 Laptop GPU
+2025-12-28 02:21:38 - genai_embedding_model - INFO - CUDA Version: 12.4
+2025-12-28 02:21:38 - genai_embedding_model - INFO - GPU Memory: 4.29 GB
+2025-12-28 02:21:38 - genai_embedding_model - INFO - GPU memory cache cleared for optimization
+2025-12-28 02:21:38 - genai_embedding_model - INFO - PyTorch Version: 2.6.0+cu124
+2025-12-28 02:21:38 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): huggingface.co:443
+2025-12-28 02:21:39 - urllib3.connectionpool - DEBUG - https://huggingface.co:443 "HEAD /distilbert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2025-12-28 02:21:39 - urllib3.connectionpool - DEBUG - https://huggingface.co:443 "GET /api/models/distilbert-base-uncased/tree/main/additional_chat_templates?recursive=False&expand=False HTTP/1.1" 307 146
+2025-12-28 02:21:40 - urllib3.connectionpool - DEBUG - https://huggingface.co:443 "GET /api/models/distilbert/distilbert-base-uncased/tree/main/additional_chat_templates?recursive=False&expand=False HTTP/1.1" 404 64
+2025-12-28 02:21:40 - urllib3.connectionpool - DEBUG - https://huggingface.co:443 "GET /api/models/distilbert-base-uncased/tree/main?recursive=True&expand=False HTTP/1.1" 307 119
+2025-12-28 02:21:40 - urllib3.connectionpool - DEBUG - https://huggingface.co:443 "GET /api/models/distilbert/distilbert-base-uncased/tree/main?recursive=True&expand=False HTTP/1.1" 200 2197
+2025-12-28 02:21:40 - urllib3.connectionpool - DEBUG - https://huggingface.co:443 "HEAD /distilbert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2025-12-28 02:21:41 - urllib3.connectionpool - DEBUG - https://huggingface.co:443 "HEAD /distilbert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2025-12-28 02:21:41 - genai_embedding_model - INFO - Training model for 3 epochs with batch_size=16
+2025-12-28 02:21:47 - genai_embedding_model - INFO - Epoch 1 [10] Loss: 0.0069
+2025-12-28 02:21:52 - genai_embedding_model - INFO - Epoch 1 [20] Loss: 0.0072
+2025-12-28 02:21:57 - genai_embedding_model - INFO - Epoch 1 [30] Loss: 0.2616
+2025-12-28 02:22:02 - genai_embedding_model - INFO - Epoch 1 [40] Loss: 0.0059
+2025-12-28 02:22:08 - genai_embedding_model - INFO - Epoch 1 [50] Loss: 0.0199
+2025-12-28 02:22:13 - genai_embedding_model - INFO - Epoch 1 [60] Loss: 0.0034
+2025-12-28 02:22:18 - genai_embedding_model - INFO - Epoch 1 [70] Loss: 0.0032
+2025-12-28 02:22:24 - genai_embedding_model - INFO - Epoch 1 [80] Loss: 0.0027
+2025-12-28 02:22:29 - genai_embedding_model - INFO - Epoch 1 [90] Loss: 0.0018
+2025-12-28 02:22:35 - genai_embedding_model - INFO - Epoch 1 [100] Loss: 0.0010
+2025-12-28 02:22:40 - genai_embedding_model - INFO - Epoch 1 [110] Loss: 0.0007
