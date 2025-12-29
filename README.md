@@ -1,8 +1,9 @@
 # GenAI-Powered Fraud Detection System: Federated Learning Approach
 
-**SRM Institue of Science & Technology | Final Year Major Project**  
+**SRM Institute of Science and Technology | Final Year Major Project**  
 **Department of Computer Intelligence**  
-**Academic Year: 2025-2026**
+**Team:** Anshuman Bakshi (RA2211033010117) & Komal (RA2211033010114)  
+**Academic Tenure:** 2022-2026
 
 
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen)
@@ -614,26 +615,59 @@ This project serves as the **foundation (v1.0)** for advanced research at leadin
 
 ## 👥 Team Information
 
-**Project:** GenAI-Powered Fraud Detection with Federated Learning  
-**Institution:** SRM Rangarajan Engineering College  
+**Project:** GenAI-Powered Fraud Detection with Federated Learning (SentinXFL)  
+**Institution:** SRM Institute of Science and Technology  
 **Department:** Computer Science & Engineering  
-**Academic Year:** 2024-2025  
-**Duration:** August 2024 - December 2025
+**Academic Tenure:** 2022-2026  
+**Project Duration:** August 2024 - December 2025
 
-**Versioning & Evolution:**
+### Team Members
+
+**1. Anshuman Bakshi** - RA2211033010117
+- **Role:** Federated Learning & GenAI Integration Lead
+- **Responsibilities:**
+  - Federated learning framework design and implementation
+  - Llama/GenAI monitoring and narrative generation
+  - BERT embedding model training and optimization
+  - Differential privacy integration (ε=4.5)
+  - GitHub repository management and documentation
+
+**2. Komal** - RA2211033010114
+- **Role:** Fraud Pattern Analysis & Security Validation Lead
+- **Responsibilities:**
+  - Fraud classification and attack pattern analysis (8-type system)
+  - PII detection and masking validation (7 types, 94.1% accuracy)
+  - Security threat model evaluation and testing
+  - Performance benchmarking and results analysis
+  - Presentation of fraud detection findings and security compliance
+
+### Project Versioning & Evolution
+
 - **v1.0 (Current):** SRM Final Year Major Project - Foundation
 - **v2.0 (Planned):** Enhanced research with SHAP XAI + robustness analysis
 - **v3.0 (Target):** Master's thesis at German technical university with advanced contributions
 
 ---
 
-## 📧 Contact & Collaboration
+## 📧 Contact & Information
 
-For questions, collaboration, or research partnerships:
-- **Developer:** Anshuman Bakshi | AI/ML Engineer
+**Primary Contact - Federated Learning & GenAI:**
+- **Developer:** Anshuman Bakshi | RA2211033010117
 - **Email:** bakshianshuman117@gmail.com
-- **Research Focus:** Federated Learning, Privacy-Preserving ML, Fraud Detection
-- **Open for:** Master's program collaborations, internships, research partnerships
+- **Research Focus:** Federated Learning, GenAI Monitoring, Privacy-Preserving ML
+
+**Co-Lead - Fraud Analysis & Security:**
+- **Analyst:** Komal | RA2211033010114
+- **Research Focus:** Fraud Pattern Detection, PII Security, Compliance Validation
+
+**Institution:** SRM Institute of Science and Technology  
+**Program:** B.Tech Computer Science & Engineering (2022-2026)
+
+---
+
+For questions or research partnerships related to:
+- **Federated Learning & LLM Integration:** Contact Anshuman Bakshi
+- **Fraud Pattern Analysis & Security:** Contact Komal
 
 ---
 
@@ -643,15 +677,18 @@ This project is submitted as coursework under SRM KTR guidelines. All external r
 
 **If citing this work:**
 ```bibtex
-@project{bakshi2025genaifraud,
-  author={Bakshi, Anshuman},
-  title={GenAI-Powered Fraud Detection System: Federated Learning Approach},
+@project{bakshi_komal2025sentinxfl,
+  author={Bakshi, Anshuman and Komal},
+  title={SentinXFL: GenAI-Powered Fraud Detection System with Federated Learning},
   year={2025},
-  institution={SRM Institute of Science & Technology},
-  url={https://github.com/bakshianshuman/GenAI-Fraud-Detection-Federated-Learning}
+  institution={SRM Institute of Science and Technology},
+  registrationNumbers={RA2211033010117, RA2211033010114},
+  url={https://github.com/PseudoOzone/SentinXFL}
 }
 ```
 
+---
+
 **Last Updated:** December 29, 2025  
 **Status:** v1.0 Complete & Ready for SRM Submission  
-**Next: v2.0 Research Enhancement Phase**
+**Next:** v2.0 Research Enhancement Phase
