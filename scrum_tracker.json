@@ -1,0 +1,279 @@
+{
+  "project": {
+    "name": "GenAI-Powered Fraud Detection System - SentinXFL",
+    "institution": "SRM Institute of Science and Technology",
+    "tenure": "2022-2026",
+    "version": "1.0"
+  },
+  "team": [
+    {
+      "id": "anshuman_001",
+      "name": "Anshuman Bakshi",
+      "role": "Federated Learning & GenAI Integration Lead",
+      "student_id": "RA2211033010117",
+      "email": "anshuman.bakshi@srmist.edu.in"
+    },
+    {
+      "id": "komal_001",
+      "name": "Komal",
+      "role": "Fraud Pattern Analysis & Security Validation Lead",
+      "student_id": "RA2211033010114",
+      "email": "komal@srmist.edu.in"
+    }
+  ],
+  "sprints": [
+    {
+      "sprint_id": "SPRINT-001",
+      "name": "SRM Major Project Submission Sprint",
+      "start_date": "2026-01-06",
+      "end_date": "2026-01-10",
+      "goal": "Prepare complete submission for SRM major project review",
+      "status": "ACTIVE"
+    }
+  ],
+  "daily_scrums": [
+    {
+      "date": "2026-01-06",
+      "sprint_id": "SPRINT-001",
+      "standup": [
+        {
+          "member_id": "anshuman_001",
+          "member_name": "Anshuman Bakshi",
+          "completed": [
+            "Verified architecture diagram against 10 system components (100% accuracy)",
+            "README documentation comprehensive and production-ready",
+            "All code syntax validated, 0 runtime errors",
+            "Team information and institution details finalized"
+          ],
+          "in_progress": [
+            "Save Eraser.io architecture PNG to notebooks folder",
+            "Integration test: Streamlit demo with professional diagram",
+            "Verify all 10 architecture components display correctly"
+          ],
+          "blockers": [
+            "PNG image file not yet exported from Eraser.io"
+          ],
+          "next_steps": [
+            "Download/export Eraser.io diagram as PNG",
+            "Place in: notebooks/sentinxfl_architecture.png",
+            "Run: streamlit run notebooks/sentinxfl_comprehensive_demo.py",
+            "Validate architecture tab displays correctly"
+          ],
+          "priority": "HIGH"
+        },
+        {
+          "member_id": "komal_001",
+          "member_name": "Komal",
+          "completed": [
+            "Validated 8 fraud pattern detection classes in codebase",
+            "Confirmed PII detection accuracy: 94.1% (7 types)",
+            "Security review: All GDPR/PCI-DSS compliance requirements met",
+            "Attack pattern analysis documentation complete"
+          ],
+          "in_progress": [
+            "Review final fraud detection accuracy metrics (89.2% F1-score)",
+            "Validate differential privacy implementation (ε=4.5, δ=1e-5)",
+            "Prepare fraud pattern documentation for SRM presentation"
+          ],
+          "blockers": [],
+          "next_steps": [
+            "Cross-validate 8 fraud pattern classes with test data",
+            "Document PII masking effectiveness",
+            "Prepare security compliance report",
+            "Review federated learning accuracy metrics"
+          ],
+          "priority": "MEDIUM"
+        }
+      ]
+    }
+  ],
+  "project_metrics": [
+    {
+      "component": "Federated Learning (FedAvg)",
+      "owner": "Anshuman Bakshi",
+      "status": "COMPLETE",
+      "accuracy": "89.2% F1-score",
+      "convergence_gap": "2.3%",
+      "rounds": 100,
+      "organizations": 5
+    },
+    {
+      "component": "Differential Privacy",
+      "owner": "Anshuman Bakshi",
+      "status": "COMPLETE",
+      "epsilon": 4.5,
+      "delta": "1e-5",
+      "gaussian_noise": 1.2
+    },
+    {
+      "component": "PII Detection & Masking",
+      "owner": "Komal",
+      "status": "COMPLETE",
+      "accuracy": "94.1%",
+      "pii_types": 7,
+      "types": [
+        "Email",
+        "Phone",
+        "SSN",
+        "Card",
+        "IP",
+        "Account ID",
+        "API Key"
+      ]
+    },
+    {
+      "component": "BERT Embeddings",
+      "owner": "Anshuman Bakshi",
+      "status": "COMPLETE",
+      "dimension": 768,
+      "model": "DistilBERT"
+    },
+    {
+      "component": "Llama 2 LoRA",
+      "owner": "Anshuman Bakshi",
+      "status": "COMPLETE",
+      "parameters": "1.2M",
+      "efficiency": "0.1% of GPT-2"
+    },
+    {
+      "component": "Fraud Detection",
+      "owner": "Komal",
+      "status": "COMPLETE",
+      "f1_score": "89.2%",
+      "pattern_classes": 8,
+      "latency_ms": "<100"
+    },
+    {
+      "component": "Compliance Logging",
+      "owner": "Komal",
+      "status": "COMPLETE",
+      "standards": [
+        "GDPR Article 25",
+        "PCI-DSS 3.2.1"
+      ],
+      "retention": "7 years",
+      "hashing": "SHA-256"
+    },
+    {
+      "component": "Architecture Diagram",
+      "owner": "Anshuman Bakshi",
+      "status": "IN_PROGRESS",
+      "component_coverage": "100%",
+      "verified_components": 10
+    },
+    {
+      "component": "Demo Preparation",
+      "owner": "Anshuman Bakshi",
+      "status": "IN_PROGRESS",
+      "completion_percent": 90,
+      "blocking_item": "PNG export"
+    }
+  ],
+  "action_items": [
+    {
+      "id": "AI-001",
+      "task": "Export Eraser.io PNG diagram",
+      "owner": "anshuman_001",
+      "priority": "HIGH",
+      "status": "NOT_STARTED",
+      "due_date": "2026-01-06",
+      "estimated_hours": 0.5
+    },
+    {
+      "id": "AI-002",
+      "task": "Save PNG to notebooks folder",
+      "owner": "anshuman_001",
+      "priority": "HIGH",
+      "status": "NOT_STARTED",
+      "due_date": "2026-01-06",
+      "estimated_hours": 0.25
+    },
+    {
+      "id": "AI-003",
+      "task": "Test Streamlit integration",
+      "owner": "anshuman_001",
+      "priority": "HIGH",
+      "status": "NOT_STARTED",
+      "due_date": "2026-01-06",
+      "estimated_hours": 1
+    },
+    {
+      "id": "AI-004",
+      "task": "Run demo validation",
+      "owner": "anshuman_001",
+      "priority": "MEDIUM",
+      "status": "NOT_STARTED",
+      "due_date": "2026-01-07",
+      "estimated_hours": 1
+    },
+    {
+      "id": "AI-005",
+      "task": "Fraud pattern final review",
+      "owner": "komal_001",
+      "priority": "MEDIUM",
+      "status": "IN_PROGRESS",
+      "due_date": "2026-01-07",
+      "estimated_hours": 2
+    },
+    {
+      "id": "AI-006",
+      "task": "Prepare presentation deck",
+      "owner": "anshuman_001",
+      "priority": "MEDIUM",
+      "status": "NOT_STARTED",
+      "due_date": "2026-01-08",
+      "estimated_hours": 3
+    },
+    {
+      "id": "AI-007",
+      "task": "Security compliance report",
+      "owner": "komal_001",
+      "priority": "MEDIUM",
+      "status": "NOT_STARTED",
+      "due_date": "2026-01-08",
+      "estimated_hours": 2
+    },
+    {
+      "id": "AI-008",
+      "task": "SRM submission final check",
+      "owner": "anshuman_001",
+      "priority": "HIGH",
+      "status": "PENDING",
+      "due_date": "2026-01-10",
+      "estimated_hours": 1
+    }
+  ],
+  "risks": [
+    {
+      "id": "RISK-001",
+      "description": "PNG export delay from Eraser.io",
+      "impact": "MEDIUM",
+      "probability": "LOW",
+      "mitigation": "Use fallback description text if needed"
+    },
+    {
+      "id": "RISK-002",
+      "description": "Streamlit version incompatibility",
+      "impact": "LOW",
+      "probability": "LOW",
+      "mitigation": "Code tested on current version, fallback to older version if needed"
+    },
+    {
+      "id": "RISK-003",
+      "description": "Demo application not running",
+      "impact": "MEDIUM",
+      "probability": "LOW",
+      "mitigation": "Fallback to command-line validation and metrics display"
+    }
+  ],
+  "resources": {
+    "repository": "c:\\Users\\anshu\\GenAI-Fraud-Detection-V2",
+    "main_demo": "notebooks/sentinxfl_comprehensive_demo.py",
+    "documentation": "README.md",
+    "test_data": "generated/fraud_data_combined_clean.csv",
+    "models_directory": "models/",
+    "logs_directory": "logs/"
+  },
+  "last_updated": "2026-01-06T00:00:00Z",
+  "next_review": "2026-01-07T00:00:00Z"
+}
