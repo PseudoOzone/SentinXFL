@@ -1,0 +1,194 @@
+[
+  {
+    "pattern_id": "PAT-BASE-001",
+    "name": "Card Testing Attack",
+    "description": "Criminals test stolen cards with small transactions (<$5) in rapid succession across different merchants to verify validity before making large purchases.",
+    "pattern_type": "fact",
+    "severity": "high",
+    "status": "confirmed",
+    "observation_count": 50000,
+    "confidence": 0.95,
+    "false_positive_rate": 0.0,
+    "affected_amount_total": 0.0,
+    "source_bank_count": 12,
+    "first_seen": "2026-02-07T15:07:59.145746",
+    "last_seen": "2026-02-07T15:07:59.145746",
+    "frequency_per_day": 0.0,
+    "feature_signature": {
+      "amount": 0.15,
+      "velocity_1h": 0.35,
+      "merchant_variety": 0.25
+    },
+    "attack_vector": "card_testing",
+    "mitre_id": "FRD-T1001",
+    "tags": [
+      "card_testing",
+      "velocity",
+      "small_amount"
+    ],
+    "related_patterns": [],
+    "version": 1,
+    "created_at": "2026-02-07T15:07:59.145746",
+    "updated_at": "2026-02-07T15:07:59.145888"
+  },
+  {
+    "pattern_id": "PAT-BASE-002",
+    "name": "Account Takeover (ATO)",
+    "description": "Unauthorized access to legitimate accounts via phishing, credential stuffing, or SIM swapping. Characterized by login from new device/location followed by high-value transactions.",
+    "pattern_type": "fact",
+    "severity": "critical",
+    "status": "confirmed",
+    "observation_count": 32000,
+    "confidence": 0.92,
+    "false_positive_rate": 0.0,
+    "affected_amount_total": 0.0,
+    "source_bank_count": 15,
+    "first_seen": "2026-02-07T15:07:59.145788",
+    "last_seen": "2026-02-07T15:07:59.145788",
+    "frequency_per_day": 0.0,
+    "feature_signature": {
+      "device_change": 0.4,
+      "location_change": 0.3,
+      "amount": 0.2
+    },
+    "attack_vector": "account_takeover",
+    "mitre_id": "FRD-T1002",
+    "tags": [
+      "ato",
+      "credential_stuffing",
+      "device_change"
+    ],
+    "related_patterns": [],
+    "version": 1,
+    "created_at": "2026-02-07T15:07:59.145788",
+    "updated_at": "2026-02-07T15:07:59.148244"
+  },
+  {
+    "pattern_id": "PAT-BASE-003",
+    "name": "Synthetic Identity Fraud",
+    "description": "Combining real and fake identity elements (e.g., real SSN + fake name) to create new identities. Typically builds credit history before bust-out.",
+    "pattern_type": "fact",
+    "severity": "critical",
+    "status": "confirmed",
+    "observation_count": 18000,
+    "confidence": 0.88,
+    "false_positive_rate": 0.0,
+    "affected_amount_total": 0.0,
+    "source_bank_count": 8,
+    "first_seen": "2026-02-07T15:07:59.145811",
+    "last_seen": "2026-02-07T15:07:59.145811",
+    "frequency_per_day": 0.0,
+    "feature_signature": {
+      "credit_age": 0.3,
+      "utilization_spike": 0.35,
+      "new_accounts": 0.2
+    },
+    "attack_vector": "synthetic_identity",
+    "mitre_id": "FRD-T1003",
+    "tags": [
+      "synthetic_id",
+      "identity_fraud",
+      "bust_out"
+    ],
+    "related_patterns": [],
+    "version": 1,
+    "created_at": "2026-02-07T15:07:59.145811",
+    "updated_at": "2026-02-07T15:07:59.150628"
+  },
+  {
+    "pattern_id": "PAT-BASE-004",
+    "name": "Money Mule Network",
+    "description": "Layered money movement through compromised or recruited accounts to obscure fraud proceeds. Rapid transfers between multiple accounts with decreasing amounts.",
+    "pattern_type": "fact",
+    "severity": "high",
+    "status": "confirmed",
+    "observation_count": 22000,
+    "confidence": 0.9,
+    "false_positive_rate": 0.0,
+    "affected_amount_total": 0.0,
+    "source_bank_count": 10,
+    "first_seen": "2026-02-07T15:07:59.145831",
+    "last_seen": "2026-02-07T15:07:59.145831",
+    "frequency_per_day": 0.0,
+    "feature_signature": {
+      "transfer_chain_length": 0.4,
+      "amount_decay": 0.3,
+      "velocity_24h": 0.2
+    },
+    "attack_vector": "money_mule",
+    "mitre_id": "FRD-T1004",
+    "tags": [
+      "money_mule",
+      "layering",
+      "rapid_transfer"
+    ],
+    "related_patterns": [],
+    "version": 1,
+    "created_at": "2026-02-07T15:07:59.145831",
+    "updated_at": "2026-02-07T15:07:59.152969"
+  },
+  {
+    "pattern_id": "PAT-BASE-005",
+    "name": "Transaction Laundering",
+    "description": "Processing unauthorized transactions through a legitimate merchant account. Disguising illegal transactions as legitimate commerce.",
+    "pattern_type": "fact",
+    "severity": "high",
+    "status": "confirmed",
+    "observation_count": 15000,
+    "confidence": 0.85,
+    "false_positive_rate": 0.0,
+    "affected_amount_total": 0.0,
+    "source_bank_count": 6,
+    "first_seen": "2026-02-07T15:07:59.145850",
+    "last_seen": "2026-02-07T15:07:59.145850",
+    "frequency_per_day": 0.0,
+    "feature_signature": {
+      "merchant_category_mismatch": 0.35,
+      "volume_spike": 0.3,
+      "avg_ticket_change": 0.25
+    },
+    "attack_vector": "transaction_laundering",
+    "mitre_id": "FRD-T1005",
+    "tags": [
+      "laundering",
+      "merchant_fraud",
+      "mcc_mismatch"
+    ],
+    "related_patterns": [],
+    "version": 1,
+    "created_at": "2026-02-07T15:07:59.145850",
+    "updated_at": "2026-02-07T15:07:59.155931"
+  },
+  {
+    "pattern_id": "PAT-BASE-006",
+    "name": "Cross-Border Velocity Attack",
+    "description": "Rapid transactions across multiple countries within impossible travel timeframes. Card-present transactions in different continents within hours.",
+    "pattern_type": "fact",
+    "severity": "critical",
+    "status": "confirmed",
+    "observation_count": 28000,
+    "confidence": 0.94,
+    "false_positive_rate": 0.0,
+    "affected_amount_total": 0.0,
+    "source_bank_count": 14,
+    "first_seen": "2026-02-07T15:07:59.145869",
+    "last_seen": "2026-02-07T15:07:59.145869",
+    "frequency_per_day": 0.0,
+    "feature_signature": {
+      "geo_velocity": 0.45,
+      "country_count_24h": 0.3,
+      "time_between_txn": 0.2
+    },
+    "attack_vector": "cross_border_velocity",
+    "mitre_id": "FRD-T1006",
+    "tags": [
+      "cross_border",
+      "velocity",
+      "impossible_travel"
+    ],
+    "related_patterns": [],
+    "version": 1,
+    "created_at": "2026-02-07T15:07:59.145869",
+    "updated_at": "2026-02-07T15:07:59.159036"
+  }
+]
