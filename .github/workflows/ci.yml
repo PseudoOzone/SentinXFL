@@ -52,7 +52,7 @@ jobs:
           DEBUG: "true"
       - name: Upload coverage
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: coverage-report
           path: coverage.xml
@@ -135,7 +135,7 @@ jobs:
       - name: Generate Python SBOM
         run: cyclonedx-py requirements pyproject.toml -o sbom-python.json --format json || true
       - name: Upload SBOM
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: sbom
           path: sbom-*.json
