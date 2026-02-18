@@ -123,7 +123,7 @@ async def load_dataset(request: LoadDatasetRequest):
         raise HTTPException(404, str(e))
     except Exception as e:
         log.error(f"Error loading dataset: {e}")
-        raise HTTPException(500, f"Failed to load dataset: {e}")
+        raise HTTPException(500, "Internal error while loading dataset")
 
 
 @router.post("/load-all", response_model=UnifiedStatsResponse)
@@ -163,7 +163,7 @@ async def load_all_datasets(sample_frac: Optional[float] = None):
 
     except Exception as e:
         log.error(f"Error loading datasets: {e}")
-        raise HTTPException(500, f"Failed to load datasets: {e}")
+        raise HTTPException(500, "Internal error while loading datasets")
 
 
 @router.get("/preview/{dataset_type}", response_model=DataPreviewResponse)
@@ -199,7 +199,7 @@ async def preview_dataset(dataset_type: DatasetType, n_rows: int = 5):
         raise HTTPException(404, str(e))
     except Exception as e:
         log.error(f"Error previewing dataset: {e}")
-        raise HTTPException(500, f"Failed to preview dataset: {e}")
+        raise HTTPException(500, "Internal error while previewing dataset")
 
 
 @router.get("/stats")
@@ -222,7 +222,7 @@ async def get_current_stats():
 
     except Exception as e:
         log.error(f"Error getting stats: {e}")
-        raise HTTPException(500, str(e))
+        raise HTTPException(500, "Internal error while fetching statistics")
 
 
 @router.get("/columns/{dataset_type}")
@@ -236,3 +236,82 @@ async def get_dataset_columns(dataset_type: DatasetType):
         "column_mappings": mappings,
         "num_columns": len(mappings),
     }
+
+
+# ============================================
+# Synthetic Dataset Generator
+# ============================================
+class GenerateDatasetRequest(BaseModel):
+    """Request to generate a synthetic dataset."""
+    n_samples: int = Field(10000, ge=100, le=1_000_000, description="Number of rows")
+    fraud_ratio: float = Field(0.05, ge=0.001, le=0.5, description="Fraud ratio")
+    n_features: int = Field(20, ge=10, le=50, description="Number of features")
+    include_pii: bool = Field(False, description="Include PII columns")
+    dataset_name: str = Field("synthetic_fraud", description="Name for the dataset")
+    save: bool = Field(True, description="Save to disk")
+    format: str = Field("csv", description="File format: csv or parquet")
+    seed: int = Field(42, ge=0, description="Random seed for reproducibility")
+
+
+class GenerateDatasetResponse(BaseModel):
+    """Response from dataset generation."""
+    dataset_name: str
+    total_rows: int
+    total_columns: int
+    numeric_features: int
+    categorical_features: int
+    fraud_count: int
+    legitimate_count: int
+    fraud_ratio: float
+    memory_mb: float
+    columns: list[str]
+    sample_rows: list[dict]
+    file_path: Optional[str] = None
+
+
+@router.post("/generate", response_model=GenerateDatasetResponse)
+async def generate_dataset(request: GenerateDatasetRequest):
+    """
+    Generate a synthetic fraud detection dataset.
+
+    Creates realistic synthetic data with configurable fraud ratio,
+    size, and feature complexity for training & testing.
+    """
+    from sentinxfl.data.generator import FraudDatasetGenerator
+
+    try:
+        generator = FraudDatasetGenerator(seed=request.seed)
+        df = generator.generate(
+            n_samples=request.n_samples,
+            fraud_ratio=request.fraud_ratio,
+            n_features=request.n_features,
+            include_pii=request.include_pii,
+            dataset_name=request.dataset_name,
+        )
+
+        info = generator.get_dataset_info(df)
+
+        file_path = None
+        if request.save:
+            path = generator.save_dataset(df, request.dataset_name, request.format)
+            file_path = str(path)
+
+        return GenerateDatasetResponse(
+            dataset_name=request.dataset_name,
+            total_rows=info["total_rows"],
+            total_columns=info["total_columns"],
+            numeric_features=info["numeric_features"],
+            categorical_features=info["categorical_features"],
+            fraud_count=info["fraud_count"],
+            legitimate_count=info["legitimate_count"],
+            fraud_ratio=info["fraud_ratio"],
+            memory_mb=info["memory_mb"],
+            columns=info["columns"],
+            sample_rows=info["sample_rows"][:5],
+            file_path=file_path,
+        )
+
+    except Exception as e:
+        log.error(f"Error generating dataset: {e}")
+        raise HTTPException(500, f"Failed to generate dataset: {str(e)}")
+

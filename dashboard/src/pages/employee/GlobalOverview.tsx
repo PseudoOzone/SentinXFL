@@ -1,6 +1,6 @@
 /**
  * Employee - Global Overview Dashboard
- * Shows cross-bank intelligence, global stats, and system health.
+ * Shows cross-bank intelligence, global stats, FL collaboration, and system health.
  */
 import { useState, useEffect } from 'react'
 import {
@@ -12,6 +12,7 @@ import {
   Activity,
   Zap,
   RefreshCw,
+  TrendingUp,
 } from 'lucide-react'
 import {
   BarChart,
@@ -20,10 +21,14 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer,
   PieChart,
   Pie,
   Cell,
+  AreaChart,
+  Area,
+  Line,
 } from 'recharts'
 import * as api from '../../api/knowledge'
 
@@ -34,6 +39,7 @@ export default function EmployeeGlobalOverview() {
   const [banks, setBanks] = useState<api.BankProfile[]>([])
   const [alerts, setAlerts] = useState<api.EmergentAlert[]>([])
   const [features, setFeatures] = useState<Array<{ feature: string; mean_importance: number }>>([])
+  const [trends, setTrends] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => { loadAll() }, [])
@@ -41,16 +47,18 @@ export default function EmployeeGlobalOverview() {
   const loadAll = async () => {
     setLoading(true)
     try {
-      const [s, b, a, f] = await Promise.all([
+      const [s, b, a, f, t] = await Promise.all([
         api.getGlobalStatistics(),
         api.getBanks(),
         api.getAlerts({ limit: 10 }),
         api.getGlobalFeatures(10),
+        api.getGlobalTrends(20),
       ])
       setStats(s)
       setBanks(b.banks)
       setAlerts(a.alerts)
       setFeatures(Array.isArray(f) ? f : [])
+      setTrends(t)
     } catch (e) {
       console.error('Load failed:', e)
     }
@@ -58,12 +66,34 @@ export default function EmployeeGlobalOverview() {
   }
 
   const typeData = stats?.pattern_library?.by_type
-    ? Object.entries(stats.pattern_library.by_type).map(([k, v], i) => ({
-        name: k,
-        value: v as number,
-        fill: COLORS[i % COLORS.length],
-      }))
+    ? Object.entries(stats.pattern_library.by_type)
+        .filter(([, v]) => (v as number) > 0)
+        .map(([k, v], i) => ({
+          name: k,
+          value: v as number,
+          fill: COLORS[i % COLORS.length],
+        }))
     : []
+
+  // FL round trend data
+  const roundHistory = trends?.rounds || []
+  const flTrendData = roundHistory.map((r: any) => ({
+    round: `R${r.round}`,
+    accuracy: +(r.global_accuracy * 100).toFixed(1),
+    loss: +r.global_loss.toFixed(3),
+    banks: r.banks_participated,
+  }))
+
+  // Bank contribution ranking (sorted by rounds participated)
+  const bankContributions = [...banks]
+    .sort((a, b) => b.rounds_participated - a.rounds_participated)
+    .slice(0, 8)
+    .map((b) => ({
+      name: b.display_name.length > 15 ? b.display_name.slice(0, 14) + '…' : b.display_name,
+      rounds: b.rounds_participated,
+      accuracy: +(b.model_accuracy * 100).toFixed(1),
+      fraud_rate: +(b.avg_fraud_rate * 100).toFixed(2),
+    }))
 
   return (
     <div className="space-y-6">
@@ -100,12 +130,13 @@ export default function EmployeeGlobalOverview() {
           {typeData.length > 0 ? (
             <ResponsiveContainer width="100%" height={250}>
               <PieChart>
-                <Pie data={typeData} cx="50%" cy="50%" outerRadius={90} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
+                <Pie data={typeData} cx="50%" cy="50%" innerRadius={45} outerRadius={85} dataKey="value" paddingAngle={2}>
                   {typeData.map((entry, i) => (
                     <Cell key={i} fill={entry.fill} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip formatter={(value: number, name: string) => [value, name.charAt(0).toUpperCase() + name.slice(1)]} />
+                <Legend iconType="circle" iconSize={10} wrapperStyle={{ fontSize: '12px' }} />
               </PieChart>
             </ResponsiveContainer>
           ) : (
@@ -132,6 +163,65 @@ export default function EmployeeGlobalOverview() {
         </div>
       </div>
 
+      {/* FL Collaboration Intelligence */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Global Accuracy Trend */}
+        <div className="bg-white rounded-xl border border-slate-200 p-6">
+          <h3 className="text-lg font-semibold text-slate-800 mb-1 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-green-500" />
+            Global Model Performance
+          </h3>
+          <p className="text-xs text-slate-400 mb-4">Accuracy &amp; loss across FL rounds</p>
+          {flTrendData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={260}>
+              <AreaChart data={flTrendData}>
+                <defs>
+                  <linearGradient id="empAccGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#22c55e" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <XAxis dataKey="round" tick={{ fontSize: 10 }} />
+                <YAxis yAxisId="left" domain={['dataMin - 1', 100]} tick={{ fontSize: 10 }} />
+                <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 10 }} />
+                <Tooltip />
+                <Legend />
+                <Area yAxisId="left" type="monotone" dataKey="accuracy" stroke="#22c55e" fill="url(#empAccGrad)" strokeWidth={2} name="Accuracy %" />
+                <Line yAxisId="right" type="monotone" dataKey="loss" stroke="#f97316" strokeWidth={1.5} dot={false} name="Loss" />
+              </AreaChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="h-[260px] flex items-center justify-center text-slate-400 text-sm">No FL round data</div>
+          )}
+        </div>
+
+        {/* Bank Collaboration Chart */}
+        <div className="bg-white rounded-xl border border-slate-200 p-6">
+          <h3 className="text-lg font-semibold text-slate-800 mb-1 flex items-center gap-2">
+            <Building2 className="w-5 h-5 text-blue-500" />
+            Bank Collaboration &amp; Contribution
+          </h3>
+          <p className="text-xs text-slate-400 mb-4">FL rounds participated &amp; model accuracy by bank</p>
+          {bankContributions.length > 0 ? (
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={bankContributions}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <XAxis dataKey="name" tick={{ fontSize: 9 }} angle={-15} textAnchor="end" height={50} />
+                <YAxis yAxisId="left" tick={{ fontSize: 10 }} />
+                <YAxis yAxisId="right" orientation="right" domain={[85, 100]} tick={{ fontSize: 10 }} />
+                <Tooltip />
+                <Legend />
+                <Bar yAxisId="left" dataKey="rounds" fill="#6366f1" name="FL Rounds" radius={[4, 4, 0, 0]} />
+                <Bar yAxisId="right" dataKey="accuracy" fill="#22c55e" name="Accuracy %" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="h-[260px] flex items-center justify-center text-slate-400 text-sm">No bank data</div>
+          )}
+        </div>
+      </div>
+
       {/* Banks Table + Alerts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Banks Table */}
@@ -145,6 +235,7 @@ export default function EmployeeGlobalOverview() {
                 <tr>
                   <th className="text-left px-5 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">Bank</th>
                   <th className="text-right px-5 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">Transactions</th>
+                  <th className="text-right px-5 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">FL Rounds</th>
                   <th className="text-right px-5 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">Fraud Rate</th>
                   <th className="text-right px-5 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">Accuracy</th>
                   <th className="text-right px-5 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">Risk</th>
@@ -159,6 +250,11 @@ export default function EmployeeGlobalOverview() {
                     </td>
                     <td className="px-5 py-3 text-right text-sm text-slate-600">{b.total_transactions.toLocaleString()}</td>
                     <td className="px-5 py-3 text-right text-sm">
+                      <span className="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full text-xs font-medium">
+                        {b.rounds_participated}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3 text-right text-sm">
                       <span className={b.avg_fraud_rate > 0.05 ? 'text-red-600 font-medium' : 'text-slate-600'}>
                         {(b.avg_fraud_rate * 100).toFixed(2)}%
                       </span>
@@ -169,7 +265,7 @@ export default function EmployeeGlobalOverview() {
                     </td>
                   </tr>
                 )) : (
-                  <tr><td colSpan={5} className="px-5 py-8 text-center text-slate-400">No banks registered</td></tr>
+                  <tr><td colSpan={6} className="px-5 py-8 text-center text-slate-400">No banks registered</td></tr>
                 )}
               </tbody>
             </table>

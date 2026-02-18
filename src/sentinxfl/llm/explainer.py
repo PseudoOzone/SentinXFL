@@ -165,7 +165,7 @@ class FraudExplainer:
             return
             
         if self._llm_provider is None:
-            self._llm_provider = await get_llm_provider()
+            self._llm_provider = get_llm_provider()
             
         if self._rag_pipeline is None and self.config.include_rag_context:
             self._rag_pipeline = RAGPipeline()
@@ -378,10 +378,10 @@ class FraudExplainer:
             )
             
             # Extract patterns from results
-            for result in results:
-                if "pattern" in result.document.metadata.get("type", "").lower():
-                    detected.append(result.document.content[:100])
-                    confidence = max(confidence, result.score)
+            for doc, dist in zip(results.documents, results.distances):
+                if "pattern" in doc.metadata.get("type", "").lower():
+                    detected.append(doc.content[:100])
+                    confidence = max(confidence, 1.0 - dist)
                     
         except Exception as e:
             logger.warning(f"RAG pattern detection failed: {e}")
@@ -460,7 +460,7 @@ Output ONLY the explanation sentence, nothing else."""
                 temperature=0.3,
                 max_tokens=100
             )
-            return response.strip()
+            return response.content.strip()
         except Exception as e:
             logger.warning(f"LLM brief explanation failed: {e}")
             return self._generate_brief_fallback(prediction, risk_level, patterns)
@@ -500,7 +500,7 @@ Output ONLY the explanation sentence, nothing else."""
             try:
                 query = f"Explain fraud detection with {patterns[0] if patterns else 'anomaly'}"
                 results = await self._rag_pipeline.retrieve(query, top_k=2)
-                rag_context = "\n".join([r.document.content[:200] for r in results])
+                rag_context = "\n".join([doc.content[:200] for doc in results.documents])
             except Exception:
                 pass
         
@@ -547,7 +547,7 @@ Write in plain English, suitable for the target audience."""
                 temperature=self.config.temperature,
                 max_tokens=self.config.max_tokens
             )
-            return response.strip()
+            return response.content.strip()
         except Exception as e:
             logger.warning(f"LLM detailed explanation failed: {e}")
             return self._generate_detailed_fallback(
@@ -710,7 +710,7 @@ async def create_explainer(
     explanation_config: ExplanationConfig | None = None
 ) -> FraudExplainer:
     """Factory function to create and initialize a FraudExplainer."""
-    llm_provider = await get_llm_provider(llm_config)
+    llm_provider = get_llm_provider(llm_config)
     explainer = FraudExplainer(
         llm_provider=llm_provider,
         config=explanation_config

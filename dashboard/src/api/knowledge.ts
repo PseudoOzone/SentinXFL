@@ -32,17 +32,19 @@ async function authFetch<T>(endpoint: string, options: RequestInit = {}): Promis
 export interface PatternEntry {
   pattern_id: string
   pattern_type: string
-  title: string
+  name: string
   description: string
   severity: string
   confidence: number
-  source: string
+  status: string
   first_seen: string
   last_seen: string
   observation_count: number
   source_bank_count: number
   novelty_score: number
-  indicators: Record<string, number>
+  feature_signature: Record<string, number>
+  attack_vector: string
+  tags: string[]
 }
 
 export interface EmergentAlert {
@@ -81,7 +83,7 @@ export interface GlobalStats {
   global_avg_fraud_rate: number
   total_rounds: number
   pattern_library: {
-    total_patterns: number
+    total: number
     by_type: Record<string, number>
     by_severity: Record<string, number>
   }
@@ -236,3 +238,75 @@ export const ingestRound = (data: {
     method: 'POST',
     body: JSON.stringify(data),
   })
+
+// ============================================
+// FL Training & Analysis
+// ============================================
+
+export interface RoundResult {
+  round: number
+  accuracy: number
+  loss: number
+  f1: number
+  privacy_spent: number | null
+  clients_active: number
+}
+
+export interface DetectedPattern {
+  name: string
+  description: string
+  severity: string
+  confidence: number
+  attack_vector: string
+  top_features: Record<string, number>
+  observation_count: number
+}
+
+export interface TrainAnalyzeResponse {
+  status: string
+  dataset_name: string
+  dataset_rows: number
+  dataset_fraud_count: number
+  dataset_fraud_ratio: number
+  bank_id: string
+  num_rounds: number
+  num_clients: number
+  aggregation_strategy: string
+  dp_enabled: boolean
+  round_results: RoundResult[]
+  final_accuracy: number
+  final_loss: number
+  final_f1: number
+  final_epsilon: number | null
+  detected_patterns: DetectedPattern[]
+  intelligence_ingested: boolean
+  new_patterns_mined: number
+  new_alerts_generated: number
+  global_model_version: number | null
+}
+
+export interface AvailableDataset {
+  name: string
+  filename: string
+  size_mb: number
+}
+
+export const trainAndAnalyze = (data: {
+  dataset_path: string
+  bank_id: string
+  bank_name?: string
+  num_clients?: number
+  num_rounds?: number
+  aggregation_strategy?: string
+  dp_enabled?: boolean
+  dp_epsilon?: number
+  target_column?: string
+  max_rows?: number
+}) =>
+  authFetch<TrainAnalyzeResponse>('/fl/train-and-analyze', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+
+export const getAvailableDatasets = () =>
+  authFetch<{ datasets: AvailableDataset[] }>('/fl/available-datasets')

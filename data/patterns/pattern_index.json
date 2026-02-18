@@ -12,7 +12,7 @@
     "affected_amount_total": 0.0,
     "source_bank_count": 12,
     "first_seen": "2026-02-07T15:07:59.145746",
-    "last_seen": "2026-02-07T15:07:59.145746",
+    "last_seen": "2026-02-16T10:15:04.968872",
     "frequency_per_day": 0.0,
     "feature_signature": {
       "amount": 0.15,
@@ -27,9 +27,9 @@
       "small_amount"
     ],
     "related_patterns": [],
-    "version": 1,
-    "created_at": "2026-02-07T15:07:59.145746",
-    "updated_at": "2026-02-07T15:07:59.145888"
+    "version": 12,
+    "created_at": "2026-02-16T10:15:04.968872",
+    "updated_at": "2026-02-16T10:15:04.968999"
   },
   {
     "pattern_id": "PAT-BASE-002",
@@ -44,7 +44,7 @@
     "affected_amount_total": 0.0,
     "source_bank_count": 15,
     "first_seen": "2026-02-07T15:07:59.145788",
-    "last_seen": "2026-02-07T15:07:59.145788",
+    "last_seen": "2026-02-16T10:15:04.968900",
     "frequency_per_day": 0.0,
     "feature_signature": {
       "device_change": 0.4,
@@ -59,9 +59,9 @@
       "device_change"
     ],
     "related_patterns": [],
-    "version": 1,
-    "created_at": "2026-02-07T15:07:59.145788",
-    "updated_at": "2026-02-07T15:07:59.148244"
+    "version": 12,
+    "created_at": "2026-02-16T10:15:04.968900",
+    "updated_at": "2026-02-16T10:15:04.972514"
   },
   {
     "pattern_id": "PAT-BASE-003",
@@ -76,7 +76,7 @@
     "affected_amount_total": 0.0,
     "source_bank_count": 8,
     "first_seen": "2026-02-07T15:07:59.145811",
-    "last_seen": "2026-02-07T15:07:59.145811",
+    "last_seen": "2026-02-16T10:15:04.968923",
     "frequency_per_day": 0.0,
     "feature_signature": {
       "credit_age": 0.3,
@@ -91,9 +91,9 @@
       "bust_out"
     ],
     "related_patterns": [],
-    "version": 1,
-    "created_at": "2026-02-07T15:07:59.145811",
-    "updated_at": "2026-02-07T15:07:59.150628"
+    "version": 12,
+    "created_at": "2026-02-16T10:15:04.968923",
+    "updated_at": "2026-02-16T10:15:04.975347"
   },
   {
     "pattern_id": "PAT-BASE-004",
@@ -108,7 +108,7 @@
     "affected_amount_total": 0.0,
     "source_bank_count": 10,
     "first_seen": "2026-02-07T15:07:59.145831",
-    "last_seen": "2026-02-07T15:07:59.145831",
+    "last_seen": "2026-02-16T10:15:04.968937",
     "frequency_per_day": 0.0,
     "feature_signature": {
       "transfer_chain_length": 0.4,
@@ -123,9 +123,9 @@
       "rapid_transfer"
     ],
     "related_patterns": [],
-    "version": 1,
-    "created_at": "2026-02-07T15:07:59.145831",
-    "updated_at": "2026-02-07T15:07:59.152969"
+    "version": 12,
+    "created_at": "2026-02-16T10:15:04.968937",
+    "updated_at": "2026-02-16T10:15:04.978152"
   },
   {
     "pattern_id": "PAT-BASE-005",
@@ -140,7 +140,7 @@
     "affected_amount_total": 0.0,
     "source_bank_count": 6,
     "first_seen": "2026-02-07T15:07:59.145850",
-    "last_seen": "2026-02-07T15:07:59.145850",
+    "last_seen": "2026-02-16T10:15:04.968954",
     "frequency_per_day": 0.0,
     "feature_signature": {
       "merchant_category_mismatch": 0.35,
@@ -155,9 +155,9 @@
       "mcc_mismatch"
     ],
     "related_patterns": [],
-    "version": 1,
-    "created_at": "2026-02-07T15:07:59.145850",
-    "updated_at": "2026-02-07T15:07:59.155931"
+    "version": 12,
+    "created_at": "2026-02-16T10:15:04.968954",
+    "updated_at": "2026-02-16T10:15:04.981088"
   },
   {
     "pattern_id": "PAT-BASE-006",
@@ -172,7 +172,7 @@
     "affected_amount_total": 0.0,
     "source_bank_count": 14,
     "first_seen": "2026-02-07T15:07:59.145869",
-    "last_seen": "2026-02-07T15:07:59.145869",
+    "last_seen": "2026-02-16T10:15:04.968973",
     "frequency_per_day": 0.0,
     "feature_signature": {
       "geo_velocity": 0.45,
@@ -187,8 +187,207 @@
       "impossible_travel"
     ],
     "related_patterns": [],
-    "version": 1,
-    "created_at": "2026-02-07T15:07:59.145869",
-    "updated_at": "2026-02-07T15:07:59.159036"
+    "version": 12,
+    "created_at": "2026-02-16T10:15:04.968973",
+    "updated_at": "2026-02-16T10:15:04.983998"
+  },
+  {
+    "pattern_id": "PAT-EMG-001",
+    "name": "Real-Time Payment Exploitation",
+    "description": "Attackers exploiting instant payment rails (UPI/IMPS) to withdraw funds before fraud detection systems can react. Micro-delays in settlement used to layer transactions.",
+    "pattern_type": "emergent",
+    "severity": "critical",
+    "status": "under_review",
+    "observation_count": 320,
+    "confidence": 0.72,
+    "false_positive_rate": 0.0,
+    "affected_amount_total": 0.0,
+    "source_bank_count": 4,
+    "first_seen": "2026-02-07T15:42:08.677415",
+    "last_seen": "2026-02-16T10:15:05.010550",
+    "frequency_per_day": 12.5,
+    "feature_signature": {
+      "payment_speed": 0.42,
+      "settlement_gap": 0.35,
+      "amount": 0.18
+    },
+    "attack_vector": "realtime_payment_abuse",
+    "mitre_id": "",
+    "tags": [
+      "upi",
+      "imps",
+      "instant_payment",
+      "emerging"
+    ],
+    "related_patterns": [],
+    "version": 11,
+    "created_at": "2026-02-16T10:15:05.010550",
+    "updated_at": "2026-02-16T10:15:05.010654"
+  },
+  {
+    "pattern_id": "PAT-EMG-002",
+    "name": "Deepfake KYC Bypass",
+    "description": "Use of AI-generated deepfake documents and video to pass KYC verification checks. Detected across multiple onboarding pipelines.",
+    "pattern_type": "emergent",
+    "severity": "high",
+    "status": "under_review",
+    "observation_count": 85,
+    "confidence": 0.64,
+    "false_positive_rate": 0.0,
+    "affected_amount_total": 0.0,
+    "source_bank_count": 3,
+    "first_seen": "2026-02-07T15:42:08.677429",
+    "last_seen": "2026-02-16T10:15:05.010569",
+    "frequency_per_day": 3.2,
+    "feature_signature": {
+      "doc_authenticity_score": 0.5,
+      "liveness_anomaly": 0.35,
+      "onboarding_velocity": 0.15
+    },
+    "attack_vector": "deepfake_kyc",
+    "mitre_id": "",
+    "tags": [
+      "deepfake",
+      "kyc",
+      "identity",
+      "ai_generated"
+    ],
+    "related_patterns": [],
+    "version": 9,
+    "created_at": "2026-02-16T10:15:05.010569",
+    "updated_at": "2026-02-16T10:15:05.014960"
+  },
+  {
+    "pattern_id": "PAT-EMG-003",
+    "name": "QR Code Injection Attack",
+    "description": "Malicious QR codes overlaid on legitimate merchant payment terminals redirecting payments to attacker-controlled accounts.",
+    "pattern_type": "zero_day",
+    "severity": "high",
+    "status": "active",
+    "observation_count": 42,
+    "confidence": 0.58,
+    "false_positive_rate": 0.0,
+    "affected_amount_total": 0.0,
+    "source_bank_count": 2,
+    "first_seen": "2026-02-07T15:42:08.677442",
+    "last_seen": "2026-02-16T10:15:05.010587",
+    "frequency_per_day": 1.8,
+    "feature_signature": {
+      "merchant_mismatch": 0.45,
+      "geo_anomaly": 0.3,
+      "recipient_age": 0.25
+    },
+    "attack_vector": "qr_injection",
+    "mitre_id": "",
+    "tags": [
+      "qr_code",
+      "merchant_fraud",
+      "zero_day"
+    ],
+    "related_patterns": [],
+    "version": 9,
+    "created_at": "2026-02-16T10:15:05.010587",
+    "updated_at": "2026-02-16T10:15:05.018452"
+  },
+  {
+    "pattern_id": "PAT-VAR-001",
+    "name": "ATO via SIM-Swap (Variant)",
+    "description": "Variant of Account Takeover pattern using telecom-assisted SIM swapping to intercept OTPs. Higher success rate than credential stuffing.",
+    "pattern_type": "variant",
+    "severity": "medium",
+    "status": "active",
+    "observation_count": 1800,
+    "confidence": 0.81,
+    "false_positive_rate": 0.0,
+    "affected_amount_total": 0.0,
+    "source_bank_count": 7,
+    "first_seen": "2026-02-07T15:42:08.677457",
+    "last_seen": "2026-02-16T10:15:05.010605",
+    "frequency_per_day": 6.4,
+    "feature_signature": {
+      "sim_change_recency": 0.4,
+      "otp_failure_rate": 0.3,
+      "device_change": 0.25
+    },
+    "attack_vector": "sim_swap_ato",
+    "mitre_id": "",
+    "tags": [
+      "sim_swap",
+      "ato",
+      "variant",
+      "telecom"
+    ],
+    "related_patterns": [
+      "PAT-BASE-002"
+    ],
+    "version": 9,
+    "created_at": "2026-02-16T10:15:05.010605",
+    "updated_at": "2026-02-16T10:15:05.022091"
+  },
+  {
+    "pattern_id": "PAT-HIST-001",
+    "name": "Check Kiting (Legacy)",
+    "description": "Historical pattern of exploiting float time between check deposit and clearance. Largely mitigated by modern clearing systems but still observed in rural banking.",
+    "pattern_type": "historical",
+    "severity": "low",
+    "status": "deprecated",
+    "observation_count": 95000,
+    "confidence": 0.97,
+    "false_positive_rate": 0.0,
+    "affected_amount_total": 0.0,
+    "source_bank_count": 15,
+    "first_seen": "2026-02-07T15:42:08.677469",
+    "last_seen": "2026-02-16T10:15:05.010622",
+    "frequency_per_day": 0.3,
+    "feature_signature": {
+      "check_float_time": 0.5,
+      "multi_bank_deposits": 0.3,
+      "amount_pattern": 0.2
+    },
+    "attack_vector": "check_kiting",
+    "mitre_id": "",
+    "tags": [
+      "check",
+      "legacy",
+      "float",
+      "historical"
+    ],
+    "related_patterns": [],
+    "version": 9,
+    "created_at": "2026-02-16T10:15:05.010622",
+    "updated_at": "2026-02-16T10:15:05.025157"
+  },
+  {
+    "pattern_id": "PAT-VAR-002",
+    "name": "Refund Abuse via Chargebacks",
+    "description": "Coordinated friendly fraud exploiting chargeback mechanisms \u2014 buy expensive items, file false disputes claiming non-delivery.",
+    "pattern_type": "variant",
+    "severity": "medium",
+    "status": "confirmed",
+    "observation_count": 12500,
+    "confidence": 0.87,
+    "false_positive_rate": 0.0,
+    "affected_amount_total": 0.0,
+    "source_bank_count": 9,
+    "first_seen": "2026-02-07T15:42:08.677480",
+    "last_seen": "2026-02-16T10:15:05.010637",
+    "frequency_per_day": 18.5,
+    "feature_signature": {
+      "chargeback_rate": 0.4,
+      "dispute_timing": 0.3,
+      "merchant_category": 0.2,
+      "amount": 0.1
+    },
+    "attack_vector": "chargeback_abuse",
+    "mitre_id": "",
+    "tags": [
+      "chargeback",
+      "friendly_fraud",
+      "refund_abuse"
+    ],
+    "related_patterns": [],
+    "version": 9,
+    "created_at": "2026-02-16T10:15:05.010637",
+    "updated_at": "2026-02-16T10:15:05.028130"
   }
 ]

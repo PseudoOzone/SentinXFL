@@ -19,6 +19,9 @@ import Explainability from './pages/Explainability'
 import ClientDashboard from './pages/client/ClientDashboard'
 import ClientUpload from './pages/client/ClientUpload'
 import ClientReports from './pages/client/ClientReports'
+import ClientMyBank from './pages/client/ClientMyBank'
+import ClientFLOverview from './pages/client/ClientFLOverview'
+import ClientTrainAnalyze from './pages/client/ClientTrainAnalyze'
 
 // Employee pages
 import GlobalOverview from './pages/employee/GlobalOverview'
@@ -26,6 +29,7 @@ import BankMonitor from './pages/employee/BankMonitor'
 import EmergentMonitor from './pages/employee/EmergentMonitor'
 import PatternManagement from './pages/employee/PatternManagement'
 import GlobalReports from './pages/employee/GlobalReports'
+import DatasetGenerator from './pages/employee/DatasetGenerator'
 
 function ProtectedRoute({ children, requiredRole }: { children: JSX.Element; requiredRole?: string }) {
   const { isAuthenticated, user, loading } = useAuth()
@@ -72,7 +76,10 @@ function App() {
         }
       >
         <Route index element={<ClientDashboard />} />
+        <Route path="bank" element={<ClientMyBank />} />
+        <Route path="fl" element={<ClientFLOverview />} />
         <Route path="upload" element={<ClientUpload />} />
+        <Route path="train" element={<ClientTrainAnalyze />} />
         <Route path="reports" element={<ClientReports />} />
       </Route>
 
@@ -96,6 +103,7 @@ function App() {
         <Route path="ops/training" element={<FLTraining />} />
         <Route path="ops/privacy" element={<Privacy />} />
         <Route path="ops/explainability" element={<Explainability />} />
+        <Route path="ops/generator" element={<DatasetGenerator />} />
       </Route>
 
       {/* Catch all */}

@@ -58,6 +58,10 @@ logs/
 # Data files (keep structure, ignore large files)
 data/datasets/*.csv
 data/processed/*.parquet
+data/uploads/
+data/knowledge/central_model_state.json
+data/*.duckdb
+data/*.duckdb.wal
 !data/datasets/.gitkeep
 !data/processed/.gitkeep
 

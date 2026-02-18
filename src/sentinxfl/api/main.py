@@ -52,13 +52,13 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS Middleware
+# CORS Middleware — restricted origins
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
 )
 
 
@@ -101,17 +101,21 @@ async def health_check():
 
     Returns component status and system info.
     """
-    import torch
     import platform
 
-    gpu_available = torch.cuda.is_available()
+    gpu_available = False
     gpu_info = None
-    if gpu_available:
-        gpu_info = {
-            "name": torch.cuda.get_device_name(0),
-            "memory_total_gb": round(torch.cuda.get_device_properties(0).total_memory / 1e9, 2),
-            "memory_allocated_gb": round(torch.cuda.memory_allocated(0) / 1e9, 2),
-        }
+    try:
+        import torch
+        gpu_available = torch.cuda.is_available()
+        if gpu_available:
+            gpu_info = {
+                "name": torch.cuda.get_device_name(0),
+                "memory_total_gb": round(torch.cuda.get_device_properties(0).total_memory / 1e9, 2),
+                "memory_allocated_gb": round(torch.cuda.memory_allocated(0) / 1e9, 2),
+            }
+    except ImportError:
+        pass
 
     return {
         "status": "healthy",
@@ -160,6 +164,12 @@ app.include_router(data.router, prefix="/api/v1/data", tags=["Data"])
 app.include_router(privacy.router, prefix="/api/v1/privacy", tags=["Privacy"])
 app.include_router(ml.router, prefix="/api/v1", tags=["Machine Learning"])
 
-# Future routers (to be added in Sprint 3+)
-# app.include_router(fl.router, prefix="/api/v1/fl", tags=["Federated Learning"])
-# app.include_router(llm.router, prefix="/api/v1/llm", tags=["LLM Explainability"])
+try:
+    from sentinxfl.api.routes import fl, llm, knowledge, auth, upload
+    app.include_router(fl.router, prefix="/api/v1", tags=["Federated Learning"])
+    app.include_router(llm.router, prefix="/api/v1", tags=["LLM Explainability"])
+    app.include_router(knowledge.router, prefix="/api/v1", tags=["Knowledge"])
+    app.include_router(auth.router, prefix="/api/v1", tags=["Auth"])
+    app.include_router(upload.router, prefix="/api/v1", tags=["Upload"])
+except ImportError as e:
+    pass  # Optional routes when dependencies are missing

@@ -1,0 +1,22 @@
+# Ignore large data/model files
+data/
+models/
+chroma_db/
+logs/
+*.csv
+*.parquet
+*.pt
+*.onnx
+*.pkl
+.env
+.env.*
+!.env.example
+__pycache__
+.venv
+venv
+node_modules
+.git
+.pytest_cache
+.mypy_cache
+.ruff_cache
+*.egg-info

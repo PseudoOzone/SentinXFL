@@ -1,15 +1,17 @@
 // Base API configuration
 const API_BASE_URL = '/api/v1'
 
-// Generic fetch wrapper with error handling
+// Generic fetch wrapper with error handling and auth
 async function fetchAPI<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`
   
+  const token = localStorage.getItem('token')
   const defaultHeaders: HeadersInit = {
     'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   }
   
   const response = await fetch(url, {
@@ -111,7 +113,7 @@ export interface DocumentSource {
 export const healthCheck = () => 
   fetchAPI<{ status: string }>('/health')
 
-// Transactions
+// Transactions — uses data routes since no dedicated transactions endpoint
 export const getTransactions = (params?: {
   limit?: number
   offset?: number
@@ -126,12 +128,12 @@ export const getTransactions = (params?: {
   
   const query = searchParams.toString()
   return fetchAPI<{ transactions: Transaction[], total: number }>(
-    `/transactions${query ? `?${query}` : ''}`
+    `/datasets${query ? `?${query}` : ''}`
   )
 }
 
 export const getTransaction = (id: string) =>
-  fetchAPI<Transaction>(`/transactions/${id}`)
+  fetchAPI<Transaction>(`/datasets/${id}`)
 
 // Fraud Explanation
 export const explainTransaction = (transactionData: {
@@ -181,19 +183,20 @@ export const startFLTraining = (config?: {
   min_clients?: number
   epsilon?: number
 }) =>
-  fetchAPI<{ message: string }>('/fl/start', {
+  fetchAPI<{ message: string }>('/fl/server/start', {
     method: 'POST',
     body: JSON.stringify(config || {}),
   })
 
 export const stopFLTraining = () =>
-  fetchAPI<{ message: string }>('/fl/stop', {
+  fetchAPI<{ message: string }>('/fl/server/start', {
     method: 'POST',
+    body: JSON.stringify({ action: 'stop' }),
   })
 
 // Privacy
 export const getPrivacyMetrics = () =>
-  fetchAPI<PrivacyMetrics>('/privacy/metrics')
+  fetchAPI<PrivacyMetrics>('/fl/privacy/budget')
 
 export const getPrivacyAuditLog = (limit: number = 20) =>
   fetchAPI<{ logs: Array<{
@@ -202,12 +205,12 @@ export const getPrivacyAuditLog = (limit: number = 20) =>
     event: string
     details: string
     severity: 'info' | 'warning' | 'success'
-  }> }>(`/privacy/audit-log?limit=${limit}`)
+  }> }>(`/audit/export?limit=${limit}`)
 
 // PII
 export const processTransaction = (data: Record<string, unknown>) =>
   fetchAPI<{ processed: Record<string, unknown>, pii_detected: string[] }>(
-    '/pii/process',
+    '/scan',
     {
       method: 'POST',
       body: JSON.stringify(data),
@@ -216,7 +219,7 @@ export const processTransaction = (data: Record<string, unknown>) =>
 
 // Model
 export const predictFraud = (features: Record<string, number>) =>
-  fetchAPI<{ probability: number, is_fraud: boolean }>('/model/predict', {
+  fetchAPI<{ probability: number, is_fraud: boolean }>('/ml/predict', {
     method: 'POST',
     body: JSON.stringify({ features }),
   })
@@ -228,4 +231,4 @@ export const getModelMetrics = () =>
     recall: number
     f1_score: number
     auc_roc: number
-  }>('/model/metrics')
+  }>('/ml/models')

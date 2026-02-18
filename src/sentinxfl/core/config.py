@@ -12,7 +12,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -48,7 +48,24 @@ class Settings(BaseSettings):
     secret_key: str = Field(default="dev-secret-key-change-in-production")
     jwt_algorithm: str = "HS256"
     jwt_expiration_minutes: int = 60
-    cors_origins: list[str] = ["http://localhost:3000"]
+    cors_origins: list[str] = ["http://localhost:3000", "http://localhost:5173"]
+
+    @model_validator(mode="after")
+    def _validate_secret_key(self) -> "Settings":
+        """Reject weak / default secret keys outside development."""
+        weak_keys = {
+            "dev-secret-key-change-in-production",
+            "your-super-secret-key-change-this",
+            "changeme",
+            "",
+        }
+        if self.environment != "development" and self.secret_key in weak_keys:
+            raise ValueError(
+                "SECRET_KEY must be set to a strong random value in "
+                f"{self.environment}. Generate one with: "
+                "python -c \"import secrets; print(secrets.token_urlsafe(32))\""
+            )
+        return self
 
     # ==========================================
     # Paths

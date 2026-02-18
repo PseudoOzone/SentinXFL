@@ -11,7 +11,7 @@ import {
   CheckCircle2,
   RefreshCw,
 } from 'lucide-react'
-import { Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import { Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { useAuth } from '../../contexts/AuthContext'
 import * as api from '../../api/knowledge'
 
@@ -54,11 +54,13 @@ export default function ClientDashboard() {
   }
 
   const sevData = stats?.pattern_library?.by_severity
-    ? Object.entries(stats.pattern_library.by_severity).map(([k, v]) => ({
-        name: k,
-        value: v as number,
-        color: severityColors[k] || '#94a3b8',
-      }))
+    ? Object.entries(stats.pattern_library.by_severity)
+        .filter(([, v]) => (v as number) > 0)
+        .map(([k, v]) => ({
+          name: k,
+          value: v as number,
+          color: severityColors[k] || '#94a3b8',
+        }))
     : []
 
   return (
@@ -113,12 +115,13 @@ export default function ClientDashboard() {
           {sevData.length > 0 ? (
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
-                <Pie data={sevData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
+                <Pie data={sevData} cx="50%" cy="50%" innerRadius={40} outerRadius={75} dataKey="value" paddingAngle={2}>
                   {sevData.map((entry, i) => (
                     <Cell key={i} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip formatter={(value: number, name: string) => [value, name.charAt(0).toUpperCase() + name.slice(1)]} />
+                <Legend iconType="circle" iconSize={10} wrapperStyle={{ fontSize: '12px' }} />
               </PieChart>
             </ResponsiveContainer>
           ) : (
@@ -139,7 +142,7 @@ export default function ClientDashboard() {
               <div key={p.pattern_id} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
                 <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm text-slate-800 truncate">{p.title}</p>
+                  <p className="font-medium text-sm text-slate-800 truncate">{p.name}</p>
                   <p className="text-xs text-slate-500 mt-0.5 line-clamp-2">{p.description}</p>
                 </div>
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
@@ -169,7 +172,7 @@ export default function ClientDashboard() {
           <div className="space-y-3">
             {emergentPatterns.length > 0 ? emergentPatterns.map((p) => (
               <div key={p.pattern_id} className="p-3 border border-amber-200 bg-amber-50 rounded-lg">
-                <p className="font-medium text-sm text-slate-800">{p.title}</p>
+                <p className="font-medium text-sm text-slate-800">{p.name}</p>
                 <p className="text-xs text-slate-600 mt-1 line-clamp-2">{p.description}</p>
                 <div className="flex items-center gap-3 mt-2 text-xs text-slate-500">
                   <span>Confidence: {(p.confidence * 100).toFixed(0)}%</span>

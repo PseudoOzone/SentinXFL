@@ -9,6 +9,7 @@ Author: Anshuman Bakshi
 """
 
 import os
+import re
 import shutil
 import uuid
 from datetime import datetime
@@ -28,6 +29,20 @@ UPLOAD_DIR = Path("data/uploads")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 MAX_FILE_SIZE = 500 * 1024 * 1024  # 500 MB
+
+_SAFE_FILENAME_RE = re.compile(r"[^\w\-.]")
+
+
+def _sanitize_filename(filename: str) -> str:
+    """Strip path separators and non-safe characters to prevent path traversal."""
+    # Take only the basename (strip directory components)
+    name = os.path.basename(filename)
+    # Replace unsafe characters
+    name = _SAFE_FILENAME_RE.sub("_", name)
+    # Reject hidden files
+    if name.startswith("."):
+        name = f"upload_{name}"
+    return name or "unnamed_upload"
 
 # ============================================
 # In-memory upload registry
@@ -64,7 +79,9 @@ async def upload_file(
     Validates file type, size, and saves for processing.
     """
     # Validate file type
-    if not file.filename or not file.filename.endswith((".csv", ".parquet")):
+    original_name = file.filename or "unnamed"
+    safe_name = _sanitize_filename(original_name)
+    if not safe_name.endswith((".csv", ".parquet")):
         raise HTTPException(status_code=400, detail="Only CSV and Parquet files are supported")
 
     # Validate user access
@@ -80,12 +97,15 @@ async def upload_file(
     bank_dir = UPLOAD_DIR / bank_id
     bank_dir.mkdir(parents=True, exist_ok=True)
 
-    save_path = bank_dir / f"{upload_id}_{file.filename}"
+    save_path = bank_dir / f"{upload_id}_{safe_name}"
+    # Ensure resolved path is still within UPLOAD_DIR (defense-in-depth)
+    if not save_path.resolve().is_relative_to(UPLOAD_DIR.resolve()):
+        raise HTTPException(status_code=400, detail="Invalid file path")
     save_path.write_bytes(content)
 
     upload_info = {
         "upload_id": upload_id,
-        "filename": file.filename,
+        "filename": safe_name,
         "bank_id": bank_id,
         "file_size": len(content),
         "status": "uploaded",
@@ -99,7 +119,7 @@ async def upload_file(
     }
     _uploads[upload_id] = upload_info
 
-    log.info("File uploaded: %s (%d bytes) for bank %s", file.filename, len(content), bank_id)
+    log.info("File uploaded: %s (%d bytes) for bank %s", safe_name, len(content), bank_id)
 
     return UploadInfo(**{k: v for k, v in upload_info.items() if k in UploadInfo.model_fields})
 
@@ -200,7 +220,7 @@ async def process_upload(upload_id: str, user: dict = Depends(require_auth)):
         upload["status"] = "error"
         upload["error_message"] = str(e)
         log.error("Error processing upload %s: %s", upload_id, e)
-        raise HTTPException(status_code=500, detail=f"Processing error: {str(e)}")
+        raise HTTPException(status_code=500, detail="File processing failed")
 
     return UploadInfo(**{k: v for k, v in upload.items() if k in UploadInfo.model_fields})
 

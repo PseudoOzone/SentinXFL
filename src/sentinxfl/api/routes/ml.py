@@ -341,18 +341,18 @@ async def train_model(
     
     if request.dataset_name == "credit_card":
         df = loader.load_credit_card_fraud(sample_frac=request.sample_frac)
-        target_col = "Class"
+        target_col = "is_fraud"
     elif request.dataset_name == "paysim":
         df = loader.load_paysim(sample_frac=request.sample_frac)
-        target_col = "isFraud"
+        target_col = "is_fraud"
     elif request.dataset_name == "bank_account":
         df = loader.load_bank_account_fraud(sample_frac=request.sample_frac)
-        target_col = "fraud_bool"
+        target_col = "is_fraud"
     else:
         raise HTTPException(400, f"Unknown dataset: {request.dataset_name}")
     
     # Exclude non-numeric columns
-    exclude_cols = [c for c in df.columns if df.schema[c] not in [int, float, bool]]
+    exclude_cols = [c for c in df.columns if not df[c].dtype.is_numeric()]
     
     # Train
     pipeline = TrainingPipeline()
@@ -407,11 +407,11 @@ async def compare_models(
     
     if dataset_name == "credit_card":
         df = loader.load_credit_card_fraud(sample_frac=sample_frac)
-        target_col = "Class"
+        target_col = "is_fraud"
     else:
         raise HTTPException(400, f"Unsupported dataset for comparison: {dataset_name}")
     
-    exclude_cols = [c for c in df.columns if df.schema[c] not in [int, float, bool]]
+    exclude_cols = [c for c in df.columns if not df[c].dtype.is_numeric()]
     
     # Compare
     pipeline = TrainingPipeline()

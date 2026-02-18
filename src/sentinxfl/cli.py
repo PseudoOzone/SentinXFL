@@ -40,7 +40,7 @@ def server(host: str, port: int, reload: bool):
 
     click.echo(f"Starting SentinXFL server on {host}:{port}")
     uvicorn.run(
-        "sentinxfl.api.main:app",
+        "sentinxfl.api.app:app",
         host=host,
         port=port,
         reload=reload,

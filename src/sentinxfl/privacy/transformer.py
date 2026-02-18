@@ -432,7 +432,7 @@ class PIITransformer:
         noise = np.random.laplace(0, scale, len(df))
         
         return df.with_columns(
-            (pl.col(column) + pl.lit(noise.tolist()).list.eval(pl.element())).alias(column)
+            (pl.col(column) + pl.Series(name=column, values=noise)).alias(column)
         )
     
     def create_transformation_plan(

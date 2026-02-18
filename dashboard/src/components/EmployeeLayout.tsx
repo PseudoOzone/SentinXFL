@@ -10,14 +10,17 @@ import {
   Layers,
   FileText,
   Shield,
-  Bell,
   LogOut,
   LayoutDashboard,
   Brain,
-  Settings,
+  Database,
+  Sparkles,
+  Search,
 } from 'lucide-react'
 import clsx from 'clsx'
 import { useAuth } from '../contexts/AuthContext'
+import NotificationPanel from './NotificationPanel'
+import SettingsModal from './SettingsModal'
 
 const navSections = [
   {
@@ -36,6 +39,9 @@ const navSections = [
       { to: '/employee/ops', icon: LayoutDashboard, label: 'System Dashboard' },
       { to: '/employee/ops/training', icon: Brain, label: 'FL Training' },
       { to: '/employee/ops/privacy', icon: Shield, label: 'Privacy' },
+      { to: '/employee/ops/transactions', icon: Search, label: 'Transactions' },
+      { to: '/employee/ops/explainability', icon: Sparkles, label: 'Explainability' },
+      { to: '/employee/ops/generator', icon: Database, label: 'Dataset Generator' },
     ],
   },
 ]
@@ -124,13 +130,8 @@ export default function EmployeeLayout() {
             SentinXFL Global Intelligence Center
           </h2>
           <div className="flex items-center gap-4">
-            <button className="relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
-            <button className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg">
-              <Settings className="w-5 h-5" />
-            </button>
+            <NotificationPanel />
+            <SettingsModal />
           </div>
         </header>
         <main className="flex-1 p-6 overflow-auto bg-slate-50">

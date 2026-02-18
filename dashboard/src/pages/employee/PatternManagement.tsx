@@ -141,7 +141,7 @@ export default function PatternManagement() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <p className="font-semibold text-sm text-slate-800 truncate">{p.title}</p>
+                      <p className="font-semibold text-sm text-slate-800 truncate">{p.name}</p>
                       <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${severityColors[p.severity] || ''}`}>
                         {p.severity}
                       </span>
@@ -172,7 +172,7 @@ export default function PatternManagement() {
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${typeColors[selectedPattern.pattern_type]}`}>
                   {selectedPattern.pattern_type}
                 </span>
-                <h3 className="text-lg font-bold text-slate-800 mt-2">{selectedPattern.title}</h3>
+                <h3 className="text-lg font-bold text-slate-800 mt-2">{selectedPattern.name}</h3>
               </div>
               <p className="text-sm text-slate-600">{selectedPattern.description}</p>
 
@@ -181,8 +181,8 @@ export default function PatternManagement() {
                 <Detail label="Confidence" value={`${(selectedPattern.confidence * 100).toFixed(1)}%`} />
                 <Detail label="Banks" value={selectedPattern.source_bank_count.toString()} />
                 <Detail label="Observations" value={selectedPattern.observation_count.toString()} />
-                <Detail label="Novelty" value={`${(selectedPattern.novelty_score * 100).toFixed(1)}%`} />
-                <Detail label="Source" value={selectedPattern.source} />
+                <Detail label="Novelty" value={`${((selectedPattern.novelty_score ?? 0) * 100).toFixed(1)}%`} />
+                <Detail label="Status" value={selectedPattern.status} />
               </div>
 
               <div>
@@ -190,12 +190,12 @@ export default function PatternManagement() {
                 <p className="text-sm text-slate-700">{new Date(selectedPattern.first_seen).toLocaleString()}</p>
               </div>
 
-              {selectedPattern.indicators && Object.keys(selectedPattern.indicators).length > 0 && (
+              {selectedPattern.feature_signature && Object.keys(selectedPattern.feature_signature).length > 0 && (
                 <div>
-                  <p className="text-xs font-medium text-slate-500 mb-1">Indicators</p>
+                  <p className="text-xs font-medium text-slate-500 mb-1">Feature Signature</p>
                   <div className="bg-slate-50 rounded-lg p-3 text-xs font-mono">
-                    {Object.entries(selectedPattern.indicators).map(([k, v]) => (
-                      <div key={k}>{k}: {typeof v === 'number' ? v.toFixed(6) : v}</div>
+                    {Object.entries(selectedPattern.feature_signature).map(([k, v]) => (
+                      <div key={k}>{k}: {typeof v === 'number' ? v.toFixed(6) : String(v)}</div>
                     ))}
                   </div>
                 </div>

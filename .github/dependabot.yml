@@ -1,0 +1,91 @@
+version: 2
+updates:
+  # Python (pip) dependencies
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: "Asia/Kolkata"
+    open-pull-requests-limit: 10
+    groups:
+      ml-frameworks:
+        patterns:
+          - "scikit-learn"
+          - "xgboost"
+          - "lightgbm"
+          - "torch"
+          - "pytorch-tabnet"
+          - "imbalanced-learn"
+      llm-rag:
+        patterns:
+          - "transformers"
+          - "accelerate"
+          - "bitsandbytes"
+          - "chromadb"
+          - "sentence-transformers"
+      fastapi-stack:
+        patterns:
+          - "fastapi"
+          - "uvicorn"
+          - "pydantic"
+          - "pydantic-settings"
+          - "python-multipart"
+          - "httpx"
+      security:
+        patterns:
+          - "python-jose"
+          - "passlib"
+          - "cryptography"
+      dev-tools:
+        patterns:
+          - "pytest"
+          - "pytest-*"
+          - "ruff"
+          - "mypy"
+          - "pre-commit"
+    labels:
+      - "dependencies"
+      - "python"
+    reviewers:
+      - "anshumanbakshi"
+
+  # npm (dashboard) dependencies
+  - package-ecosystem: npm
+    directory: "/dashboard"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: "Asia/Kolkata"
+    open-pull-requests-limit: 5
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "react-router-dom"
+          - "@types/react*"
+      build-tools:
+        patterns:
+          - "vite"
+          - "@vitejs/*"
+          - "typescript"
+          - "tailwindcss"
+          - "postcss"
+          - "autoprefixer"
+    labels:
+      - "dependencies"
+      - "frontend"
+    reviewers:
+      - "anshumanbakshi"
+
+  # GitHub Actions
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+      - "ci"

@@ -301,7 +301,11 @@ class CentralKnowledgeModel:
         """Analyze trends over recent rounds."""
         recent = self._round_history[-window:] if self._round_history else []
         if len(recent) < 2:
-            return {"message": "Insufficient data for trend analysis", "rounds_available": len(recent)}
+            return {
+                "message": "Insufficient data for trend analysis",
+                "rounds_available": len(recent),
+                "rounds": recent,
+            }
 
         accuracies = [r.get("global_accuracy", 0) for r in recent]
         losses = [r.get("global_loss", 0) for r in recent]
@@ -310,6 +314,7 @@ class CentralKnowledgeModel:
         return {
             "window": window,
             "rounds_analyzed": len(recent),
+            "rounds": recent,
             "accuracy_trend": {
                 "current": round(accuracies[-1], 4),
                 "mean": round(float(np.mean(accuracies)), 4),

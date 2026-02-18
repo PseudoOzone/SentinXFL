@@ -8,15 +8,22 @@ import {
   Upload,
   FileText,
   Shield,
-  Bell,
   LogOut,
+  Building2,
+  Brain,
+  Crosshair,
 } from 'lucide-react'
 import clsx from 'clsx'
 import { useAuth } from '../contexts/AuthContext'
+import NotificationPanel from './NotificationPanel'
+import SettingsModal from './SettingsModal'
 
 const navItems = [
   { to: '/client', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/client/bank', icon: Building2, label: 'My Bank' },
+  { to: '/client/fl', icon: Brain, label: 'Federated Learning' },
   { to: '/client/upload', icon: Upload, label: 'Upload Data' },
+  { to: '/client/train', icon: Crosshair, label: 'Train & Analyze' },
   { to: '/client/reports', icon: FileText, label: 'Reports' },
 ]
 
@@ -95,9 +102,8 @@ export default function ClientLayout() {
         <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6">
           <h2 className="text-lg font-semibold text-slate-800">Bank Fraud Intelligence</h2>
           <div className="flex items-center gap-4">
-            <button className="relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg">
-              <Bell className="w-5 h-5" />
-            </button>
+            <NotificationPanel />
+            <SettingsModal />
           </div>
         </header>
         <main className="flex-1 p-6 overflow-auto bg-slate-50">

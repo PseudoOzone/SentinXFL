@@ -9,9 +9,10 @@ Simple JWT-based authentication for dual dashboard system.
 Author: Anshuman Bakshi
 """
 
-import hashlib
+import bcrypt as _bcrypt
 import secrets
 import time
+from collections import defaultdict
 from typing import Optional
 
 from fastapi import APIRouter, HTTPException, Depends
@@ -20,9 +21,42 @@ from pydantic import BaseModel, Field
 
 from sentinxfl.core.logging import get_logger
 
+
+def _hash_password(password: str) -> str:
+    """Hash a password with bcrypt."""
+    return _bcrypt.hashpw(password.encode(), _bcrypt.gensalt()).decode()
+
+
+def _verify_password(password: str, hashed: str) -> bool:
+    """Verify a password against its bcrypt hash."""
+    return _bcrypt.checkpw(password.encode(), hashed.encode())
+
 log = get_logger(__name__)
 router = APIRouter()
 security = HTTPBearer(auto_error=False)
+
+# ============================================
+# Login rate limiting (in-memory)
+# ============================================
+_login_attempts: dict[str, list[float]] = defaultdict(list)
+_MAX_LOGIN_ATTEMPTS = 5
+_LOGIN_WINDOW_SECONDS = 300  # 5 minutes
+
+
+def _check_rate_limit(email: str) -> None:
+    """Raise 429 if too many login attempts for this email."""
+    now = time.time()
+    window_start = now - _LOGIN_WINDOW_SECONDS
+    _login_attempts[email] = [t for t in _login_attempts[email] if t > window_start]
+    if len(_login_attempts[email]) >= _MAX_LOGIN_ATTEMPTS:
+        raise HTTPException(
+            status_code=429,
+            detail="Too many login attempts. Try again later.",
+        )
+
+
+def _record_attempt(email: str) -> None:
+    _login_attempts[email].append(time.time())
 
 
 # ============================================
@@ -31,12 +65,13 @@ security = HTTPBearer(auto_error=False)
 _users: dict[str, dict] = {}
 _tokens: dict[str, dict] = {}  # token -> {user_id, role, bank_id, expires}
 
-# Seed default users
+# Seed default users — bcrypt-hashed passwords
+# In production these would come from a database, not source code.
 _DEFAULT_USERS = [
     {
         "user_id": "admin",
         "email": "admin@sentinxfl.com",
-        "password_hash": hashlib.sha256("admin123".encode()).hexdigest(),
+        "password_hash": _hash_password("admin123"),
         "role": "employee",
         "display_name": "SentinXFL Admin",
         "bank_id": None,
@@ -44,7 +79,7 @@ _DEFAULT_USERS = [
     {
         "user_id": "bank_demo",
         "email": "demo@bankdemo.com",
-        "password_hash": hashlib.sha256("bank123".encode()).hexdigest(),
+        "password_hash": _hash_password("bank123"),
         "role": "client",
         "display_name": "Demo Bank User",
         "bank_id": "bank-demo-001",
@@ -148,15 +183,16 @@ async def require_employee(
 @router.post("/auth/login", tags=["auth"])
 async def login(req: LoginRequest):
     """Login with email and password."""
-    password_hash = hashlib.sha256(req.password.encode()).hexdigest()
+    _check_rate_limit(req.email)
 
     user = None
     for u in _users.values():
-        if u["email"] == req.email and u["password_hash"] == password_hash:
+        if u["email"] == req.email:
             user = u
             break
 
-    if not user:
+    if not user or not _verify_password(req.password, user["password_hash"]):
+        _record_attempt(req.email)
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     token = _generate_token(user)
@@ -182,7 +218,7 @@ async def register(req: RegisterRequest):
     user = {
         "user_id": user_id,
         "email": req.email,
-        "password_hash": hashlib.sha256(req.password.encode()).hexdigest(),
+        "password_hash": _hash_password(req.password),
         "role": req.role,
         "display_name": req.display_name,
         "bank_id": req.bank_id,
