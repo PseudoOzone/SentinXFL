@@ -25,10 +25,10 @@ classifiers = [
 
 dependencies = [
     # Core Framework
-    "fastapi>=0.109.0",
-    "uvicorn[standard]>=0.27.0",
-    "pydantic>=2.5.0",
-    "pydantic-settings>=2.1.0",
+    "fastapi>=0.135.3",
+    "uvicorn[standard]>=0.44.0",
+    "pydantic>=2.12.5",
+    "pydantic-settings>=2.13.1",
     
     # Data Processing
     "polars>=0.20.0",
@@ -66,8 +66,8 @@ dependencies = [
     # Utilities
     "python-dotenv>=1.0.0",
     "loguru>=0.7.2",
-    "httpx>=0.26.0",
-    "python-multipart>=0.0.6",
+    "httpx>=0.28.1",
+    "python-multipart>=0.0.26",
     "aiofiles>=23.2.0",
     "orjson>=3.9.0",
     
