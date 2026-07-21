@@ -1,180 +1,159 @@
-# SentinXFL v2.0
+# SentinXFL
 
-**Privacy-First Federated Fraud Detection Platform**
+Privacy-aware federated fraud-detection research platform built as a final-year engineering project.
 
-![Version](https://img.shields.io/badge/version-2.0.0-blue)
-![Python](https://img.shields.io/badge/python-3.11+-green)
-![Tests](https://img.shields.io/badge/tests-126%20passing-brightgreen)
-![License](https://img.shields.io/badge/license-Academic-red)
+SentinXFL explores how financial institutions can train and evaluate fraud models across separate clients without treating a centralized raw-data pool as the default architecture. The repository combines data validation, PII-risk screening, classical and deep-learning models, federated aggregation, differential-privacy experiments, adversarial-client simulation, explainability, an API, and a React dashboard.
 
-## Overview
+> **Project status:** academic research prototype. It is not a certified banking product, a compliance assessment, or a production-ready security control.
 
-SentinXFL is a patent-worthy, industry-grade federated fraud detection system combining:
+## What this repository demonstrates
 
-- **Certified Data Sanitization Pipeline** (5-Gate PII Blocking)
-- **Byzantine-Robust Federated Learning** 
-- **Differential Privacy** with RDP Accounting
-- **Explainable AI** with LLM-powered insights
-- **Multi-fraud-type Unified Detection**
-- **Professional React Dashboard** with real-time monitoring
+- Client-level and centralized fraud-model experiments
+- Federated training workflows using Flower
+- FedAvg, coordinate median, trimmed mean, and Multi-Krum-style robust aggregation experiments
+- Differential-privacy components and privacy-accounting experiments
+- Label-flipping and poisoning simulations
+- PII-risk detection using column, pattern, uniqueness, and entropy-based checks
+- Evidence-oriented run artifacts, metrics, reports, and plots
+- FastAPI endpoints and a React/TypeScript dashboard
+- Automated linting, tests, frontend builds, CodeQL analysis, dependency review, and SBOM generation through GitHub Actions
 
-## 🔐 5-Gate PII Blocking Pipeline (PATENT CORE)
+## Architecture
 
+```text
+Client datasets
+      |
+      v
+Validation and PII-risk screening
+      |
+      v
+Local preprocessing and model training
+      |
+      v
+Federated aggregation and attack simulation
+      |
+      v
+Evaluation, privacy reports, explanations, and run artifacts
+      |
+      +--> FastAPI API
+      +--> React dashboard
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    5-GATE PII BLOCKING PIPELINE                 │
-├─────────────────────────────────────────────────────────────────┤
-│  Gate 1 → Column Name Analysis (semantic matching)              │
-│  Gate 2 → Regex Pattern Detection (100+ patterns)               │
-│  Gate 3 → Statistical Uniqueness (quasi-identifier detection)   │
-│  Gate 4 → Entropy Analysis (high-entropy sensitive data)        │
-│  Gate 5 → ML-based Detection (neural pattern recognition)       │
-└─────────────────────────────────────────────────────────────────┘
+
+## Repository structure
+
+```text
+SentinXFL/
+├── src/sentinxfl/
+│   ├── api/            # FastAPI application and routes
+│   ├── core/           # Configuration and logging
+│   ├── data/           # Dataset loading and partitioning
+│   ├── privacy/        # PII-risk checks and privacy utilities
+│   ├── ml/             # Model training and evaluation
+│   ├── fl/             # Federated clients, server, and aggregators
+│   ├── intelligence/   # Pattern and reporting experiments
+│   └── llm/            # Local explanation and RAG experiments
+├── dashboard/          # React and TypeScript interface
+├── tests/              # Backend and integration tests
+├── knowledge/          # Design and testing documentation
+├── data/               # Local datasets and generated data
+└── .github/workflows/  # CI and security automation
 ```
 
-## 🚀 Quick Start
+## Quick start
 
 ### Prerequisites
+
 - Python 3.11+
-- NVIDIA GPU with 4GB+ VRAM (optional)
-- 8GB+ RAM
+- Node.js 20+
+- 8 GB RAM or more
+- An NVIDIA GPU is optional; several workflows can run on CPU
+- Ollama is optional for local explanation features
 
-### Installation
+### Backend
 
 ```bash
-# Clone repository
-cd SentinXFL_Final
+git clone https://github.com/PseudoOzone/SentinXFL.git
+cd SentinXFL
 
-# Create virtual environment
 python -m venv .venv
-.venv\Scripts\activate  # Windows
-source .venv/bin/activate  # Linux/Mac
 
-# Install dependencies
+# Windows
+.venv\Scripts\activate
+
+# macOS or Linux
+source .venv/bin/activate
+
 pip install -e ".[dev]"
+cp .env.example .env  # Windows PowerShell: Copy-Item .env.example .env
 
-# Copy environment file
-copy .env.example .env
+uvicorn sentinxfl.api.app:app --reload --port 8000
 ```
 
-### Running the API Server
+API documentation is available at `http://localhost:8000/docs` while the server is running.
+
+### Dashboard
 
 ```bash
-# Start backend server
-.venv\Scripts\python.exe -m uvicorn src.sentinxfl.api.app:app --reload --port 8000
-```
-
-Server starts at http://localhost:8000
-
-### Running the Dashboard
-
-```bash
-# Install dashboard dependencies (first time only)
 cd dashboard
-npm install
-
-# Start dashboard development server
+npm ci
 npm run dev
 ```
 
-Dashboard starts at http://localhost:3000
+The development dashboard normally starts at `http://localhost:5173`.
 
-### Using the CLI
-
-```bash
-# Show system info
-python -m sentinxfl.cli info
-
-# Scan datasets for PII
-python -m sentinxfl.cli scan --dataset all
-
-# Run certification pipeline
-python -m sentinxfl.cli certify --dataset bank --sample 0.1
-```
-
-## 📊 Supported Datasets
-
-| Dataset | Rows | Features | Fraud % |
-|---------|------|----------|---------|
-| Bank Account Fraud | 6M | 32 | Variable |
-| Credit Card Fraud | 284K | 31 | 0.17% |
-| PaySim | 6.3M | 11 | 0.13% |
-
-## 📁 Project Structure
-
-```
-SentinXFL_Final/
-├── src/sentinxfl/           # Main source code
-│   ├── api/                 # FastAPI REST API
-│   ├── core/                # Configuration, logging
-│   ├── data/                # Data loading, splitting
-│   ├── privacy/             # 5-Gate PII Pipeline
-│   ├── ml/                  # ML models (Sprint 2)
-│   ├── fl/                  # Federated Learning (Sprint 3)
-│   └── llm/                 # LLM/RAG (Sprint 4)
-├── dashboard/               # React Dashboard (Sprint 5)
-│   ├── src/pages/           # Dashboard, Transactions, FL, Privacy, AI
-│   └── src/api/             # API client & React hooks
-├── tests/                   # Test suite (134 tests)
-├── data/
-│   ├── datasets/            # Raw datasets
-│   └── processed/           # Sanitized data
-├── models/checkpoints/      # Model artifacts
-└── knowledge/               # Documentation
-```
-
-## 🔒 Privacy & Compliance
-
-- **GDPR Compliant**: Full audit logging, right to erasure
-- **DPDPA Ready**: India's data protection requirements
-- **RBI Guidelines**: Banking data handling
-- **PCI-DSS**: Payment card data security
-
-## 🧪 Testing
+### CLI
 
 ```bash
-# Run tests
-pytest tests/ -v
-
-# With coverage
-pytest tests/ --cov=src/sentinxfl
+sentinxfl info
+sentinxfl scan --dataset all
 ```
 
-## 📚 API Documentation
+Run `sentinxfl --help` for the commands available in the installed version.
 
-With the server running, visit:
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
+## Testing and quality checks
 
-## 👥 Team
+```bash
+pytest tests/
+ruff check src/ tests/
+ruff format --check src/ tests/
+mypy src/sentinxfl
+```
 
-**Lead Developer**: Anshuman Bakshi (RA2211033010117)
-- All core development: Architecture, ML, FL, Privacy Pipeline
+The GitHub Actions workflow also builds the frontend and runs CodeQL. Test totals may change as the project evolves; use the current workflow result rather than a hard-coded badge as the source of truth.
 
-**Contributor**: Komal (RA2211033010114)
-- UI research, documentation support
+## Security and privacy scope
 
-**Supervisor**: Dr. Kiruthika, SRMIST Chennai
+SentinXFL includes security-oriented design experiments, but those experiments do not by themselves establish GDPR, DPDPA, RBI, PCI-DSS, or any other regulatory compliance.
 
-## 📄 License
+Before any real deployment, the following prototype components must be replaced or hardened:
 
-Proprietary - Academic Use Only
-Copyright (c) 2026 Anshuman Bakshi. All rights reserved.
-Patent Pending.
+- in-memory users, sessions, tokens, and upload metadata
+- demo authentication and seeded accounts
+- public self-registration and role assignment
+- local file storage and extension-based upload validation
+- single-process rate limiting
+- development CORS and server settings
+- unreviewed model, privacy, and LLM configurations
 
----
+Use synthetic or properly authorized datasets only. Do not upload real financial or personal data to an unreviewed deployment.
 
-*Built with ❤️ at SRMIST Chennai*
+## Experimental limitations
 
-## 🏁 Sprints & Test Results
+- Results depend on dataset composition, client partitioning, random seeds, and model configuration.
+- Heuristic PII-risk detection can produce both false positives and false negatives.
+- Differential privacy requires mechanism-specific accounting and does not automatically apply to every workflow in the repository.
+- Robust aggregation reduces some attack effects but does not guarantee Byzantine security under every threat model.
+- LLM-generated explanations are supporting artifacts, not authoritative fraud decisions.
+- No patent status or regulatory certification is claimed by this repository.
 
-- **Sprint 1:** Data Loader, PII Pipeline, Certification (22/26 tests passing)
-- **Sprint 2:** ML Models, Metrics, Ensemble, Integration (20/24 tests passing)
-- **Sprint 3:** FL, DP, RDP, Aggregators, Attacks (24/24 tests passing)
-- **Sprint 4:** LLM, RAG, Explainability, API (20/20 tests passing)
-- **Sprint 5:** Dashboard API, E2E, CORS, Versioning (20/20 tests passing)
+## Academic context
 
-**Total:** 126/134 tests passing (94%)
+Developed at SRM Institute of Science and Technology under academic supervision.
 
-- Remaining failures are due to missing validation datasets in test mocks or expected data shape mismatches (see test logs for details).
-- All dashboard and API integration tests pass.
+- **Lead developer:** Anshuman Bakshi
+- **Contributor:** Komal
+- **Supervisor:** Dr. Kiruthika
+
+## License
+
+Proprietary academic-use repository. See the repository license terms before reuse.
