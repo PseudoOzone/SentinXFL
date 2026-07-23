@@ -137,6 +137,14 @@ Before any real deployment, the following prototype components must be replaced 
 
 Use synthetic or properly authorized datasets only. Do not upload real financial or personal data to an unreviewed deployment.
 
+## Important implementation boundaries
+
+- Raw datasets remain local to simulated clients, but the current repository does **not** claim cryptographic secure aggregation in which the server is unable to inspect individual client updates.
+- Transport encryption and federated learning are not substitutes for secure aggregation, differential privacy, authentication, or update validation.
+- Differential-privacy values are experiment configurations. An epsilon value is meaningful only with its mechanism, delta, clipping bound, sampling process, number of steps, and accounting method.
+- The DP-SGD and RDP-accounting modules are educational implementations and should be validated against established libraries such as Opacus before any formal privacy claim.
+- Robust aggregation can reduce the effect of some outlier or poisoning strategies, but its guarantees depend on assumptions about client count, attacker capability, data heterogeneity, and update geometry.
+
 ## Experimental limitations
 
 - Results depend on dataset composition, client partitioning, random seeds, and model configuration.
