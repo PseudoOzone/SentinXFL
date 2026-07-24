@@ -46,7 +46,7 @@ dependencies = [
     "pytorch-tabnet>=4.1.0",
     
     # Federated Learning
-    "flwr>=1.6.0",
+    "flwr>=1.29.0",
     
     # Privacy
     "opacus>=1.4.0",
